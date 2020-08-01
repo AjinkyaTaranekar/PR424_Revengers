@@ -4,7 +4,6 @@ const instance = axios.create({
   baseURL: 'https://cyclepathtracker.herokuapp.com', // generated through ngrok valid only for 8 hrs using : ngrok http PORT
 });
 
-//https://cyclepathtracker.herokuapp.com
 instance.interceptors.request.use(
   async config => {
     const token = await AsyncStorage.getItem('token');
