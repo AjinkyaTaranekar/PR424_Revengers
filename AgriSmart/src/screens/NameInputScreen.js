@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { SafeAreaView, AsyncStorage } from 'react-native';
 import { Input } from "react-native-elements";
 import { Divider, Icon, Text, TopNavigation, TopNavigationAction, Button } from '@ui-kitten/components';
 import {navigate} from '../navigationRef';
+import Spacer from '../components/Spacer';
+import { Context as AuthContext } from "../context/AuthContext";
 
 const ForwardIcon = (props) => (
-  <Icon {...props} name='arrow-ios-forward'/>
+  <Icon {...props}  name='arrow-ios-forward'/>
 );
 var language = 'en';
 const value = async () => {
@@ -18,7 +20,8 @@ const value = async () => {
 };
 
 const NameInputScreen = () => {
-  const navigateDetails = () => {
+
+  const navigateDetails = (name) => {
     // send name to database.
     navigate('UploadProfilePic');
   };
@@ -41,6 +44,7 @@ const NameInputScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center"}}>
       <Text category = 'h3' style = {{margin: 5}}>{sentences[language][0]}</Text>
+      <Spacer></Spacer>
       <Input
         autoCapitalize="none"
         autoCorrect={false}
@@ -49,9 +53,12 @@ const NameInputScreen = () => {
         value={name}
         onChangeText={(newName) => setName(newName)}
       ></Input>
+      <Spacer></Spacer>
       <Button 
-        style={{height: 5 ,width: 180, alignSelf: "center"}} 
-        onPress={navigateDetails}
+        disabled={name ? false: true}
+        appearance='ghost'
+        style={{alignSelf: "center", position: 'absolute', bottom: 50, right: 50}} 
+        onPress={()=>navigateDetails(name)}
         accessoryRight={ForwardIcon}>
       </Button>
     </SafeAreaView>
@@ -60,7 +67,3 @@ const NameInputScreen = () => {
 };
 
 export default NameInputScreen;
-
-
-
-

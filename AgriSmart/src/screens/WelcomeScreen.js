@@ -57,6 +57,7 @@ const WelcomeScreen = () => {
         style={{width: 375, height: 350}}
         source={require('../assets/images/welcome.png')}
       />
+      
       <Layout style={{ flex: 1}}>
         <Text category = 'h3' style = {{margin: 5}}>{sentences[language][0]}</Text>
         <Text style = {{margin: 15}}>{sentences[language][1]}</Text>

@@ -21,8 +21,10 @@ const value = async () => {
 };
 
 const ChooseModeScreen = () => {
-  const navigateDetails = () => {
-    if (mode == 0)
+  const navigateDetails = async () => {
+    await AsyncStorage.setItem("mode",mode);
+    
+    if (mode == "farmer")
       navigate('Home');
     else
       navigate('DriverVerification');
@@ -46,7 +48,7 @@ const ChooseModeScreen = () => {
   const navigateBack = () => {
     navigate('UploadProfilePic'); 
   };
-    const [mode, setMode] = new useState(0);
+    const [mode, setMode] = new useState("");
 
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center'}}>
@@ -59,8 +61,9 @@ const ChooseModeScreen = () => {
                 style={{width: 125, height: 125, borderRadius: 125/ 2}} 
             />
             <Button 
+                status = {mode == 'farmer' ? 'success' : 'primary'}
                 style={{height: 5 ,width: 180, alignSelf: "center"}} 
-                onPress={newMode => setMode(0)}>
+                onPress={newMode => setMode("farmer")}>
                   {sentences[language][0]}
             </Button>
           </Layout>
@@ -70,24 +73,23 @@ const ChooseModeScreen = () => {
                 style={{width: 125, height: 125, borderRadius: 125/ 2}} 
             />
             <Button 
+                status = {mode == 'transporter' ? 'success' : 'primary'}
                 style={{height: 5 ,width: 180, alignSelf: "center"}} 
-                onPress={newMode => setMode(1)}>
+                onPress={newMode => setMode("transporter")}>
                   {sentences[language][1]}
             </Button>
           </Layout>
-        </Layout>
-        <Button 
-            style={{height: 5 ,width: 180, alignSelf: "center"}} 
+          <Button 
+            disabled = {mode ? false : true }
+            appearance='ghost'
+            style={{alignSelf: "center", position: 'absolute', bottom: 50, right: 50}} 
             onPress={navigateDetails}
             accessoryRight={ForwardIcon}>
-        </Button>
+          </Button>
+        </Layout>
       </SafeAreaView>
   
     );
 };
 
 export default ChooseModeScreen;
-
-
-
-

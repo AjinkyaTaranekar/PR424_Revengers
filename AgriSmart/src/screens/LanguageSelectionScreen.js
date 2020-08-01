@@ -81,7 +81,9 @@ const LanguageSelectionScreen = () => {
         />
       </Drawer>
       <Button 
-        style={{height: 5}} 
+        disabled={selectedIndex ? false: true}
+        appearance='ghost'
+        style={{ alignSelf: "center", position: 'absolute', bottom: 15, right: 25}} 
         onPress={navigateDetails}
         accessoryRight={ForwardIcon}>
       </Button>

@@ -48,6 +48,7 @@ const UploadProfilePicScreen = () => {
   const uploadImage = () => {
     //upload image, and set image in avatar 
   };
+  const [image, setImage] = new useState("Image");
 
   return (
     <SafeAreaView style={{ flex: 1}}>
@@ -65,19 +66,18 @@ const UploadProfilePicScreen = () => {
                 {sentences[language][0]}
           </Button>
         </Layout>
-      </Layout>
-      <Button 
-          style={{height: 5 ,width: 180, alignSelf: "center"}} 
+        <Button 
+          disabled={image ? false: true}
+          appearance='ghost'
+          style={{alignSelf: "center", position: 'absolute', bottom: 50, right: 50}} 
           onPress={navigateDetails}
           accessoryRight={ForwardIcon}>
-      </Button>
+        </Button>
+      </Layout>
+      
     </SafeAreaView>
 
   );
 };
 
 export default UploadProfilePicScreen;
-
-
-
-
