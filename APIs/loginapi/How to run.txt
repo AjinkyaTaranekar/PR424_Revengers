@@ -1,0 +1,11 @@
+How to run this API?
+cd src/
+node index.js
+
+
+// Heroku login
+
+git add .
+git commit -m 
+
+git push heroku master
