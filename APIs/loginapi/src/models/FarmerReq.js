@@ -1,14 +1,6 @@
 const mongoose = require("mongoose");
-const coordsShema = new mongoose.Schema({
-  coords: {
-    latitude: Number,
-    longitude: Number,
-    altitude: Number,
-   
-  },
-});
+
 const FarmerReqSchema = new mongoose.Schema({
-  requestId: String,
   name: String,
   contactDetails: {
     phoneno: Number,
@@ -16,8 +8,16 @@ const FarmerReqSchema = new mongoose.Schema({
     address: String,
   },
   locations: {
-    origin: coordsShema,
-    destination: coordsShema,
+    origin: {
+      latitude: Number,
+      longitude: Number,
+      altitude: Number,
+    },
+    destination: {
+      latitude: Number,
+      longitude: Number,
+      altitude: Number,
+    },
   },
   shippingDetails: {
     grainType: String,
