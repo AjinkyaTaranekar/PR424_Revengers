@@ -3,8 +3,7 @@ import React, { useState, useContext} from "react";
 import { View,TextInput ,StyleSheet, Image, Alert ,Dimensions,ImageBackground} from "react-native";
 import { Text, Input } from "react-native-elements";
 import Spacer from "./Spacer";
-import { Button, Card, Modal} from '@ui-kitten/components';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Button, Card, Modal, Icon } from '@ui-kitten/components';
 const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
   const [phoneno, setPhoneno] = new useState("");
   const [otp, setOtp] = new useState("");
@@ -35,7 +34,11 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
             <Text style={styles.logoText}>{headerText}</Text>
            </View>
           <View style={styles.inputContainer}>
-            <Icon name='account-circle' size={32} style={styles.inputIcon}/>
+            <Icon
+              style={styles.icon}
+              fill='red'
+              name='person-add-outline'
+            />
             <TextInput style={styles.input}
               autoCapitalize="none"
               autoCompleteType="off"
@@ -50,7 +53,11 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
           </View>
           <Spacer></Spacer>
           <View style={styles.inputContainer}>
-            <Icon name='lock' size={32}  style={styles.inputIcon}/>
+            <Icon
+              style={styles.icon}
+              fill='red'
+              name='lock-outline'
+            />
             <TextInput style={styles.input}
                     secureTextEntry={secureTextEntry}
                     lable="Password"
@@ -114,7 +121,13 @@ const styles = StyleSheet.create({
     alignItems:"center",
     opacity:0.8
   },
-  
+  icon: {
+    width: 32,
+    height: 32,
+    position:'absolute',
+    top:windowHeight/100,
+    left:windowWidth/40
+  },
   logoContainer:{
     alignItems:"center",
     marginBottom:70
@@ -149,19 +162,11 @@ const styles = StyleSheet.create({
     backgroundColor:'rgba(0,0,0,0.45)',
     // marginHorizontal:25
   },
-  icon:{
-    width:windowWidth-55,
-    height:45,
-  },
+  
   inputContainer:{
     marginTop:10,
     flexDirection:'row',
     color: 'white'
-  },
-  inputIcon:{
-    position:'absolute',
-    top:windowHeight/100,
-    left:windowWidth/40
   },
   // btnEye:{
   //   position:"absolute",
