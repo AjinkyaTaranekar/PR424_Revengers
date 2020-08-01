@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { SafeAreaView, AsyncStorage } from 'react-native';
-import { Image } from "react-native-elements";
-import { Divider, Icon, Text, TopNavigation,Layout, TopNavigationAction, Button } from '@ui-kitten/components';
+import { Image, Input } from "react-native-elements";
+import { Divider, Icon, Text, TopNavigation,Layout, TopNavigationAction, Button, IndexPath, Select, SelectItem} from '@ui-kitten/components';
 import {navigate} from '../navigationRef';
 import Spacer from "../components/Spacer";
 
@@ -22,12 +22,18 @@ const value = async () => {
 };
 
 const DriverVerificationScreen = () => {
-  const navigateDetails = () => {
-    if (mode == 0)
+  const navigateDetails = async () => {
+      await AsyncStorage.setItem('verify',"true");
       navigate('Home');
-    else
-      navigate('DriverVerification');
   };
+  const [aadharNo, setAadharNo] = new useState("");
+  const [drivingLic, setDrivingLic] = new useState("");
+  const [vehicleReg, setVehicleReg] = new useState("");
+  const [capacity, setCapacity] = new useState("");
+  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
+  const load = [ "Grains", "Fruits/Vegetable"];
+
+  
   
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack}/>
@@ -47,50 +53,66 @@ const DriverVerificationScreen = () => {
   const navigateBack = () => {
     navigate('UploadProfilePic'); 
   };
-    const [mode, setMode] = new useState(0);
-
     return (
       
       <SafeAreaView style={{ flex: 1}}>
-        <Divider/>
-        <Layout style={{flex: 1, justifyContent: 'center'}}>
-          <Layout style={{flexDirection: 'row', justifyContent: 'space-evenly',}}>
-            <Image 
-                source={require('../assets/images/aadharCard.png')}  
-                style={{width: 125, height: 125}} 
-            />
-            <Button 
-                style={{height: 5 ,width: 180, alignSelf: "center"}} 
-                onPress={newMode => setMode(0)}>
-                  {sentences[language][0]}
-            </Button>
-          </Layout>
-          <Layout style={{flexDirection: 'row', justifyContent: 'space-evenly',}}>
-            <Image 
-                source={require('../assets/images/drivingLicence.png')}  
-                style={{width: 150, height: 100}} 
-            />
-            <Button 
-                style={{height: 5 ,width: 180, alignSelf: "center"}} 
-                onPress={newMode => setMode(1)}>
-                  {sentences[language][1]}
-            </Button>
-          </Layout>
+        <TopNavigation accessoryLeft={BackAction}/>
+        <Layout style={{flex: 1}}>
+        <Text category = "h7">Enter your Aadhar Number</Text>
+            <Input
+              autoCapitalize="none"
+              autoCorrect={false}
+              status='primary'
+              placeholder="Aadhar Number"
+              value={aadharNo}
+              keyboardType={'numeric'}
+              onChangeText={(newAadharNo) => setAadharNo(newAadharNo)}
+            ></Input>
+          <Text category = "h7">Enter your driving licence number</Text>
+            <Input
+              autoCapitalize="none"
+              autoCorrect={false}
+              status='primary'
+              placeholder="Driving Licence Number"
+              value={drivingLic}
+              keyboardType={'numeric'}
+              onChangeText={(newDrivingLic) => setDrivingLic(newDrivingLic)}
+            ></Input>
+          <Text category = "h7">Enter your vehicle registration number</Text>
+            <Input
+              autoCapitalize="none"
+              autoCorrect={false}
+              status='primary'
+              placeholder="Vehicle Registration Number"
+              value={vehicleReg}
+              keyboardType={'numeric'}
+              onChangeText={(newVehicleReg) => setVehicleReg(newVehicleReg)}
+            ></Input>
+          <Text category = "h7">Enter your truck capacity in kg</Text>
+            <Input
+              autoCapitalize="none"
+              autoCorrect={false}
+              status='primary'
+              placeholder="Truck Capacity"
+              value={capacity}
+              keyboardType={'numeric'}
+              onChangeText={(newCapacity) => setCapacity(newCapacity)}
+            ></Input>
+          <Text category = "h7">Select type of load</Text>
+          <Select
+            status='primary'
+            value={load[selectedIndex-1]}
+            selectedIndex={selectedIndex}
+            onSelect={index => setSelectedIndex(index)}>
+            <SelectItem title='Grains'/>
+            <SelectItem title='Fruit / Vegetable'/>
+          </Select>
           <Spacer></Spacer>
-          <Layout style={{flexDirection: 'row', justifyContent: 'space-evenly',}}>
-            <Image 
-                source={require('../assets/images/vehicleRegistration.jpg')}  
-                style={{width: 150, height: 100}} 
-            />
-            <Button 
-                style={{height: 5 ,width: 180, alignSelf: "center"}} 
-                onPress={newMode => setMode(2)}>
-                  {sentences[language][2]}
-            </Button>
-          </Layout>
+           
         </Layout>
         <Button 
-            style={{height: 5 ,width: 180, alignSelf: "center"}} 
+            appearance='ghost'
+            style={{alignSelf: "center", position: 'absolute', bottom: 25, right: 25}} 
             onPress={navigateDetails}
             accessoryRight={ForwardIcon}>
         </Button>
@@ -100,7 +122,3 @@ const DriverVerificationScreen = () => {
 };
 
 export default DriverVerificationScreen;
-
-
-
-
