@@ -69,7 +69,7 @@ const signin = (dispatch) => {
       await AsyncStorage.setItem('token', response.data.token);
 
       dispatch({type: 'signin', payload: response.data.token});
-      navigate('Home');
+      navigate('NameInput');
     } catch (err) {
       dispatch({
         type: 'add_err',
