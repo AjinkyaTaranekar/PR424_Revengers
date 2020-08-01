@@ -11,10 +11,10 @@ const SignupScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <AuthForm
-        headerText="SignUp for Tracker "
+        headerText="SignUp for AgriSmart "
         errorMessage={state.errorMessage}
-        onSubmit={({ email, password }) => signup({ email, password })}
-        submitButtonText="Sign Up"
+        onSubmit={({ phoneno, password }) => signup({ phoneno, password })}
+        submitButtonText="Get OTP"
       ></AuthForm>
       <Spacer></Spacer>
 
@@ -39,9 +39,7 @@ const styles = StyleSheet.create({
   },
   container: {
     justifyContent: "center",
-
-    flex: 1,
-    // marginBottom: 10,
+    flex: 1
   },
 });
 export default SignupScreen;

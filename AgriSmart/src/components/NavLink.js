@@ -22,7 +22,14 @@ const NavLink = ({ navigation, text, routeName }) => {
 
 const styles = StyleSheet.create({
   link: {
-    color: "blue",
+    color: "white",
+    textAlign:'center',
+    marginBottom:30,
+    fontFamily:'sans-serif-condensed',
+    fontSize:18,
+    opacity:0.8,
+    fontWeight:'bold'
+
   },
 });
 
