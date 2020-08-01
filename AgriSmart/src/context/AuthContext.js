@@ -93,7 +93,7 @@ const signin = (dispatch) => {
 };
 
 const signout = (dispatch) => async () => {
-  await AsyncStorage.removeItem('token ');
+  await AsyncStorage.removeItem('token');
   dispatch({type: 'signout'});
   navigate('loginFlow');
 };
