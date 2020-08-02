@@ -1,21 +1,13 @@
 import React, { useState } from 'react';
 import { Input } from "react-native-elements";
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View,StyleSheet,Dimensions } from 'react-native';
 import MapForm from '../components/MapForm';
 import { DrawerActions } from 'react-navigation-drawer';
 import { Text, Icon, Button, Modal, Card, Datepicker, IndexPath, Select, SelectItem } from '@ui-kitten/components';
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 import { navigate } from '../navigationRef';
 import Spacer from '../components/Spacer';
 import notify from '../services/NotificationService';
-=======
-import Spacer from '../components/Spacer';
->>>>>>> parent of 81cdeaf... Dialog flow implemented partially
-=======
-import Spacer from '../components/Spacer';
-import { navigate } from '../navigationRef';
->>>>>>> parent of 347fa81... added chatbot support initial
 
 const today = new Date();
 const dayAfterTomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
@@ -30,11 +22,8 @@ const FarmerHomeScreen = ({navigation}) => {
   const [distance, setDistance] = new useState(0);
   const [visible, setVisible] = React.useState(false);
   const [weight, setWeight] = new useState("");
-<<<<<<< HEAD
   const [name, setName] = new useState("");
-=======
   const [volume, setVolume] = new useState("");
->>>>>>> parent of 347fa81... added chatbot support initial
   const minMaxPickerState = useDatepickerState();
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const load = [ "Grains", "Fruits", "Vegetable"];
@@ -78,6 +67,13 @@ const FarmerHomeScreen = ({navigation}) => {
         style={{alignSelf: "center", position: 'absolute', bottom: 50}}
         onPress = {() => {OriginDest()}}
       >Confirm Locations</Button>
+           <View>
+
+      <TouchableOpacity style={styles.chatBot} onPress={ () => navigate("ChatBot")}>
+        <Text style={{fontSize:50,alignContent:"center"}}>🤖</Text>
+      </TouchableOpacity>
+      </View>
+      
       <Modal
         visible={visible}
         backdropStyle={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}
@@ -145,5 +141,22 @@ const FarmerHomeScreen = ({navigation}) => {
 
 export default FarmerHomeScreen;
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const styles=StyleSheet.create({
+  chatBot:{
+    position:"absolute",
+    bottom:windowWidth/20,
+    right:windowWidth/20,
+    borderWidth:1,
+    borderColor:'rgba(0,0,0,0.2)',
+    alignItems:'center',
+    justifyContent:'center',
+    width:windowHeight/10,
+    height:windowHeight/10,
+    backgroundColor:'black',
+    borderRadius:windowHeight/20,
+}
+})
 
 // date food type weight

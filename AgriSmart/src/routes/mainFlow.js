@@ -10,17 +10,10 @@ const mainFlow = createSwitchNavigator({
 
   farmerFlow: createStackNavigator({
     FarmerHome: FarmerHomeScreen,
-<<<<<<< HEAD
-<<<<<<< HEAD
     ChatBot:talkToBot,
     FindTransporter: FindTransporterScreen,
     Payment: PaymentScreen
-=======
->>>>>>> parent of 81cdeaf... Dialog flow implemented partially
-=======
-    ChatBot:talkToBot
->>>>>>> parent of 347fa81... added chatbot support initial
-  },{
+ },{
     defaultNavigationOptions: {
       header: null
     }
