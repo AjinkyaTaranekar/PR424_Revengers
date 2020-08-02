@@ -5,11 +5,13 @@ import TransporterHomeScreen from '../screens/TransporterHomeScreen';
 import DrawerNavigation from './drawer'
 import NavigateToFarmerScreen from '../screens/NavigateToFarmerScreen';
 import PoolingFarmerNavigationScreen from '../screens/PoolingFarmerNavigation';
+import talkToBot from '../screens/talkToBot'
 
 const mainFlow = createSwitchNavigator({
  
   farmerFlow: createStackNavigator({
     FarmerHome: FarmerHomeScreen,
+    ChatBot:talkToBot
   },{
     defaultNavigationOptions: {
       header: null
