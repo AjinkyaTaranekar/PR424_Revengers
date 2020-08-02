@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
+import { Context as AuthContext } from "../context/AuthContext";
 import { Input } from "react-native-elements";
 import { TouchableOpacity, View } from 'react-native';
 import MapForm from '../components/MapForm';
 import { DrawerActions } from 'react-navigation-drawer';
 import { Text, Icon, Button, Modal, Card, Datepicker, IndexPath, Select, SelectItem } from '@ui-kitten/components';
+import { navigate } from '../navigationRef';
 import Spacer from '../components/Spacer';
+import notify from '../services/NotificationService';
 
 const today = new Date();
 const dayAfterTomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
@@ -14,23 +17,25 @@ const useDatepickerState = (initialDate = null) => {
 };
 const FarmerHomeScreen = ({navigation}) => {
 
+  const {  updateCoords,updateshippingDetails } = useContext(AuthContext);
   const [origin, setOrigin] = new useState({});
   const [dest, setDest] = new useState({});
   const [distance, setDistance] = new useState(0);
   const [visible, setVisible] = React.useState(false);
   const [weight, setWeight] = new useState("");
-  const [volume, setVolume] = new useState("");
   const minMaxPickerState = useDatepickerState();
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-  const load = [ "Grains", "Fruits", "Vegetable"];
+  const load = [ "Grains", "Fruits/Vegetable"];
 
   OriginDest = () => {
     setVisible(true);
     console.log(origin,dest,distance);
   };
   createBooking = (date,weight,index) => {
-    console.log('indise CreateBooking');
+    console.log('inside CreateBooking');
     setVisible(false);
+    updateshippingDetails(date,weight,index);
+    navigate('FindTransporter',{origin: origin, destination: dest, distance: distance, weight: weight, load: load[selectedIndex-1], date: minMaxPickerState.date});
   };
   
   return (
@@ -61,7 +66,7 @@ const FarmerHomeScreen = ({navigation}) => {
       <Button 
         disabled={Object.keys(origin).length === 0 && Object.keys(dest).length === 0 ? true: false}
         style={{alignSelf: "center", position: 'absolute', bottom: 50}}
-        onPress = {() => {OriginDest()}}
+        onPress = {() => {OriginDest(); updateCoords({origin,dest})}}
       >Confirm Locations</Button>
       <Modal
         visible={visible}
@@ -75,8 +80,7 @@ const FarmerHomeScreen = ({navigation}) => {
             selectedIndex={selectedIndex}
             onSelect={index => setSelectedIndex(index)}>
             <SelectItem title='Grains'/>
-            <SelectItem title='Fruit'/>            
-            <SelectItem title='Vegetable'/>
+            <SelectItem title='Fruit / Vegetable'/>
           </Select>
           <Spacer></Spacer>
           <Text h4>Select date of delivery</Text>
@@ -97,19 +101,10 @@ const FarmerHomeScreen = ({navigation}) => {
             keyboardType={'numeric'}
             onChangeText={(newWeight) => setWeight(newWeight)}
           ></Input>
-          <Text h4>Enter the volume in m^3</Text>
-          <Input
-            autoCapitalize="none"
-            autoCorrect={false}
-            status='primary'
-            placeholder="Enter volume"
-            value={volume}
-            keyboardType={'numeric'}
-            onChangeText={(newVolume) => setVolume(newVolume)}
-          ></Input>
           <Spacer></Spacer>
           
-          <Button disabled={weight && selectedIndex && volume && minMaxPickerState.date ? false: true} onPress={() => {createBooking(minMaxPickerState.date,weight,selectedIndex)}}>
+  
+          <Button disabled={weight && selectedIndex && minMaxPickerState.date ? false: true} onPress={() => {createBooking(minMaxPickerState.date,weight,selectedIndex)}}>
             Create Booking
           </Button>
         </Card>
