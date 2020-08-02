@@ -5,6 +5,7 @@ import MapForm from '../components/MapForm';
 import { DrawerActions } from 'react-navigation-drawer';
 import { Text, Icon, Button, Modal, Card, Datepicker, IndexPath, Select, SelectItem } from '@ui-kitten/components';
 import Spacer from '../components/Spacer';
+import notify from '../services/NotificationService';
 
 const today = new Date();
 const dayAfterTomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
@@ -31,6 +32,7 @@ const FarmerHomeScreen = ({navigation}) => {
   createBooking = (date,weight,index) => {
     console.log('indise CreateBooking');
     setVisible(false);
+    notify.onPressSendNotification("Ride With AgriSmart","Searching for available trucks 🚚🚚");
   };
   
   return (
