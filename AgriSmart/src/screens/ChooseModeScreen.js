@@ -25,7 +25,7 @@ const ChooseModeScreen = () => {
     await AsyncStorage.setItem("mode",mode);
     
     if (mode == "farmer")
-      navigate('Home');
+      navigate('farmerFlow');
     else
       navigate('DriverVerification');
   };

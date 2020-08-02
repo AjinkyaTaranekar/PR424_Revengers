@@ -27,7 +27,7 @@ const tryLocalSignin = (dispatch) => async () => {
   if (token) {
     console.log('got token');
     dispatch({type: 'signin', payload: token});
-    navigate('Home');
+    navigate('Drawer');
   } else {
     console.log('no token');
     navigate('Signup');

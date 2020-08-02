@@ -24,7 +24,7 @@ const value = async () => {
 const DriverVerificationScreen = () => {
   const navigateDetails = async () => {
       await AsyncStorage.setItem('verify',"true");
-      navigate('Home');
+      navigate('transporterFlow');
   };
   const [aadharNo, setAadharNo] = new useState("");
   const [drivingLic, setDrivingLic] = new useState("");
