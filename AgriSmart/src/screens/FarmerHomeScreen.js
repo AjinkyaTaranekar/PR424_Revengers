@@ -7,11 +7,7 @@ import { DrawerActions } from 'react-navigation-drawer';
 import { Text, Icon, Button, Modal, Card, Datepicker, IndexPath, Select, SelectItem } from '@ui-kitten/components';
 import { navigate } from '../navigationRef';
 import Spacer from '../components/Spacer';
-<<<<<<< HEAD
-import { navigate } from '../navigationRef';
-=======
 import notify from '../services/NotificationService';
->>>>>>> 4ed81d06c0e6a293f1c717c1d5016067df1ae352
 
 const today = new Date();
 const dayAfterTomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
