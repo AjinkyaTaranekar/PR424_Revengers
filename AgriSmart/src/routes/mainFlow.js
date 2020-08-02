@@ -10,15 +10,12 @@ import PoolingFarmerNavigationScreen from '../screens/PoolingFarmerNavigation';
 import talkToBot from '../screens/talkToBot'
 
 const mainFlow = createSwitchNavigator({
- 
+
   farmerFlow: createStackNavigator({
     FarmerHome: FarmerHomeScreen,
-<<<<<<< HEAD
-    ChatBot:talkToBot
-=======
+    ChatBot:talkToBot,
     FindTransporter: FindTransporterScreen,
     Payment: PaymentScreen
->>>>>>> 4ed81d06c0e6a293f1c717c1d5016067df1ae352
   },{
     defaultNavigationOptions: {
       header: null
