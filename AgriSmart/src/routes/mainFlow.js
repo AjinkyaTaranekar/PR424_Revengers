@@ -5,6 +5,9 @@ import TransporterHomeScreen from '../screens/TransporterHomeScreen';
 import DrawerNavigation from './drawer'
 import NavigateToFarmerScreen from '../screens/NavigateToFarmerScreen';
 import PoolingFarmerNavigationScreen from '../screens/PoolingFarmerNavigation';
+import FindTransporterScreen from '../screens/FindTransporters';
+import PaymentScreen from '../screens/PaymentScreen';
+import talkToBot from '../screens/talkToBot';
 
 const mainFlow = createSwitchNavigator({
 
