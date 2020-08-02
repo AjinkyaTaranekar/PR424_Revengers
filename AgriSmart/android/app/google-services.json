@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "451888186580",
+    "firebase_url": "https://agrismart-sih-2020.firebaseio.com",
+    "project_id": "agrismart-sih-2020",
+    "storage_bucket": "agrismart-sih-2020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451888186580:android:1a8089373b5fbf631da741",
+        "android_client_info": {
+          "package_name": "com.agrismart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "451888186580-3obj6c8sagrv805n55f5ovee1irdqna9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzpn8kOaNULQJsAjgxNrZZyI5McuZWY3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "451888186580-3obj6c8sagrv805n55f5ovee1irdqna9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
