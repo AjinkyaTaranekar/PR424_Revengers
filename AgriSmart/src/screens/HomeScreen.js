@@ -3,15 +3,26 @@ import { View, Text, StyleSheet } from "react-native";
 import {Button} from 'react-native-elements';
 import {SafeAreaView} from 'react-navigation';
 import {Context as AuthContext} from '../context/AuthContext';
-
+import MapView from 'react-native-maps';
 const HomeScreen = () => {
-  const {signout} = useContext(AuthContext);
   return (
-    <SafeAreaView forceInset={{top: 'always'}} style={styles.container}>
-      <View>
-        <Button title="Sign out" onPress={signout} />
-      </View>
-    </SafeAreaView>
+    <View style = {{flex: 1}}>
+      <MapView
+        style={{ ...StyleSheet.absoluteFillObject }}
+        enableZoomControl={true}
+        showsUserLocation = {true}
+        zoomEnabled = {true}
+        scrollEnabled = {true}
+        showsMyLocationButton ={true}
+        
+        initialRegion={{
+          latitude: 22.78825,
+          longitude: 75.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+    />
+    </View>
   );
 };
 
