@@ -36,6 +36,7 @@ const FarmerHomeScreen = ({navigation}) => {
     setVisible(false);
     updateshippingDetails(date,weight,index);
     navigate('FindTransporter',{origin: origin, destination: dest, distance: distance, weight: weight, load: load[selectedIndex-1], date: minMaxPickerState.date});
+    notify.onPressSendNotification("Ride With AgriSmart","Searching for available trucks 🚚🚚");
   };
   
   return (

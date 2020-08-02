@@ -6,6 +6,7 @@ import { DrawerActions } from 'react-navigation-drawer';
 import { Text, Icon, Button, Modal, Card, Datepicker, IndexPath, Select, SelectItem } from '@ui-kitten/components';
 import { navigate } from '../navigationRef';
 import Spacer from '../components/Spacer';
+import notify from '../services/NotificationService';
 import booking from '../services/BookingService';
 
 const TransporterHomeScreen = ({navigation}) => {
@@ -25,12 +26,14 @@ const TransporterHomeScreen = ({navigation}) => {
   };
   createBooking = async () => {
     setVisible(false);
+    notify.onPressSendNotification("Ride with AgriSmart 🚛", "Searching for  👨‍🌾 farmers Nearby");
     var farmer = booking.findFarmers({latitude: origin.lat, longitude: origin.lon},load[selectedIndex-1],weight);
     console.log("farmer",farmer);
   };
 
   const goToPooling = async () => {
     setPool(false);
+    notify.onPressSendNotification("Ride with AgriSmart 🚛", "Keep your Driving Licence, \nHappy Journey!! 😄😄");
     const result = booking.pooling();
     const token = await AsyncStorage.getItem('token');
     console.log(token)
