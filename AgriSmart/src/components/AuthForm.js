@@ -109,8 +109,12 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
             {errorMessage ? (
               <Text style={styles.errorMessage}>{errorMessage}</Text>
             ) : null}
+            {phoneno.length > 10 ? (
+              <Text style={styles.errorMessage}>Enter a valid phone number(without 91)</Text>
+            ) : null}
+            
             <Button
-              disabled={phoneno && password ? false: true}
+              disabled={phoneno && phoneno.length == 10 && password ? false: true}
               onPress={submitButtonText == 'Sign In' ? () => onSubmit({ phoneno, password }): generatedAOTP}
             >{submitButtonText}</Button>
             <Modal
