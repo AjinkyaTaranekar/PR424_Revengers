@@ -19,7 +19,7 @@ all copies or substantial portions of the Software.
 
 import Autocomplete from 'react-native-autocomplete-input';
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity,View, Button } from 'react-native';
 
 const TOMTOM_API_KEY = 'xRKxItGb3D5FZQMYh7rTe1YwvKlEmkCZ';
 var name = "";
@@ -90,15 +90,23 @@ export default class TomTomAutoComplete extends Component {
 
   render() {
     return (
+      <View style = {{
+        margin: 25,
+        flex: 1, 
+        flexDirection: 'row',
+        position: 'absolute',
+        top: this.props.position,
+    }}>
         <Autocomplete
           autoCapitalize="none"
           autoCorrect={false}
+          clearButtonMode={'always'}
           containerStyle={{
-              margin: 25,
               width: 305,
-              zIndex: 2,
-              position: 'absolute',
-              top: this.props.position,
+          }}
+          listContainerStyle = {{
+            zIndex: 0,
+            elevation: 3,
           }}
           data={this.state.places}
           defaultValue={this.state.placeQuery}
@@ -122,6 +130,9 @@ export default class TomTomAutoComplete extends Component {
                     </TouchableOpacity>)
             }
         />
+        <Button style = {{color: 'red', right: 20, position: 'absolute'}} onPress={() => this.setState({placeQuery : '', places : []})} title = "X">
+        </Button>
+      </View>
     );
   }
 }
