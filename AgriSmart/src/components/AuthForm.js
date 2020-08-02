@@ -1,15 +1,19 @@
  
 import React, { useState, useContext} from "react";
-import { View,TextInput ,StyleSheet, Image, Alert ,Dimensions,ImageBackground} from "react-native";
+import { View,TextInput ,StyleSheet, Image, Alert ,Dimensions,ImageBackground,TouchableOpacity} from "react-native";
 import { Text, Input } from "react-native-elements";
 import Spacer from "./Spacer";
-import { Button, Card, Modal, Icon } from '@ui-kitten/components';
+import { Button, Card, Modal,} from '@ui-kitten/components';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+// import Icon from 'react-native-vector-icons/MaterialIcons'
 const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
   const [phoneno, setPhoneno] = new useState("");
   const [otp, setOtp] = new useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = React.useState(false);
   const [generatedOTP, setGeneratedOTP] = new useState(Math.floor(1000 + Math.random() * 9000));
+  const [forgetPasswd,setNewPassword] = React.useState(false)
 
   const generatedAOTP = () => {
     setVisible(true);
@@ -34,11 +38,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
             <Text style={styles.logoText}>{headerText}</Text>
            </View>
           <View style={styles.inputContainer}>
-            <Icon
-              style={styles.icon}
-              fill='red'
-              name='person-add-outline'
-            />
+            <Icon name='account-circle' size={32} style={styles.inputIcon}/>
             <TextInput style={styles.input}
               autoCapitalize="none"
               autoCompleteType="off"
@@ -53,11 +53,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
           </View>
           <Spacer></Spacer>
           <View style={styles.inputContainer}>
-            <Icon
-              style={styles.icon}
-              fill='red'
-              name='lock-outline'
-            />
+            <Icon name='lock' size={32}  style={styles.inputIcon}/>
             <TextInput style={styles.input}
                     secureTextEntry={secureTextEntry}
                     lable="Password"
@@ -71,12 +67,28 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
             >
               
             </TextInput>
-              {/* <TouchableOpacity>
-              <Icon name='visibility' size={26} style={styles.btnEye}/>
-              </TouchableOpacity> */}
-
           </View>
-        
+          <View>
+          {headerText === "Sign In AgriSmart" ?<TouchableOpacity onPress={()=>{
+            setNewPassword(true)
+          }}>
+              <Text style={styles.forgotPassword}>
+                Forgot Password
+              </Text>
+            </TouchableOpacity>:null}
+            <Modal
+              visible={forgetPasswd}
+              backdropStyle={styles.backdrop}
+              onBackdropPress={() => setVisible(false)}>
+              <Card disabled={true}>
+                <Text>Welcome to UI Kitten 😻</Text>
+                <Button onPress={() => setNewPassword(false)}>
+                  DISMISS
+                </Button>
+              </Card>
+            </Modal>
+          </View>
+            
           <Spacer>
             {errorMessage ? (
               <Text style={styles.errorMessage}>{errorMessage}</Text>
@@ -128,6 +140,11 @@ const styles = StyleSheet.create({
     top:windowHeight/100,
     left:windowWidth/40
   },
+  inputIcon:{
+    position:'absolute',
+    top:windowHeight/100,
+    left:windowWidth/40
+  },
   logoContainer:{
     alignItems:"center",
     marginBottom:70
@@ -168,11 +185,12 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     color: 'white'
   },
-  // btnEye:{
-  //   position:"absolute",
-  //   top:windowHeight/100,
-  //   right:windowWidth/40
-  // }
+  forgotPassword:{
+    color:"white",
+    margin:5,
+    fontSize:16,
+    fontWeight:"bold"
+  }
 });
 
 export default AuthForm;
