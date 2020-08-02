@@ -35,7 +35,8 @@ const TransporterHomeScreen = ({navigation}) => {
     setPool(false);
     notify.onPressSendNotification("Ride with AgriSmart 🚛", "Keep your Driving Licence, \nHappy Journey!! 😄😄");
     const result = booking.pooling();
-    const token = await AsyncStorage.getItem('token');
+    //const token = await AsyncStorage.getItem('token');
+    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZjA0Yjg0MGZjNWI0NTAwMjQzNWExYWQiLCJpYXQiOjE1OTYyOTQxNTB9.MZdWWaprLPstKwGtbwWgjfSpD2donH70wwn3CbYwi5Q"
     console.log(token)
     var user,farmer;
     //request = 'false'
