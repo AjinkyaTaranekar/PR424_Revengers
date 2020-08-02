@@ -13,8 +13,8 @@ const mainFlow = createSwitchNavigator({
  
   farmerFlow: createStackNavigator({
     FarmerHome: FarmerHomeScreen,
-    ChatBot:talkToBot,
     FindTransporter: FindTransporterScreen,
+    ChatBot:talkToBot,
     Payment: PaymentScreen
   },{
     defaultNavigationOptions: {

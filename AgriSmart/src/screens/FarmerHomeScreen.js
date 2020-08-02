@@ -1,7 +1,7 @@
 import React, { useState,useContext } from 'react';
 import { Context as AuthContext } from "../context/AuthContext";
 import { Input } from "react-native-elements";
-import { TouchableOpacity, View,StyleSheet } from 'react-native';
+import { TouchableOpacity, View,StyleSheet,Dimensions } from 'react-native';
 import MapForm from '../components/MapForm';
 import { DrawerActions } from 'react-navigation-drawer';
 import { Text, Icon, Button, Modal, Card, Datepicker, IndexPath, Select, SelectItem } from '@ui-kitten/components';
@@ -72,7 +72,7 @@ const FarmerHomeScreen = ({navigation}) => {
       >Confirm Locations</Button>
            <View>
 
-      <TouchableOpacity style={styles.chatBot} onPress={navigate("ChatBot")}>
+      <TouchableOpacity style={styles.chatBot} onPress={ () => navigate("ChatBot")}>
         <Text style={{fontSize:50,alignContent:"center"}}>🤖</Text>
       </TouchableOpacity>
       </View>
@@ -136,19 +136,21 @@ const FarmerHomeScreen = ({navigation}) => {
 
 export default FarmerHomeScreen;
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const styles=StyleSheet.create({
   chatBot:{
     position:"absolute",
-    bottom:3,
-    right:0,
+    bottom:windowWidth/20,
+    right:windowWidth/20,
     borderWidth:1,
     borderColor:'rgba(0,0,0,0.2)',
     alignItems:'center',
     justifyContent:'center',
-    width:80,
-    height:80,
+    width:windowHeight/10,
+    height:windowHeight/10,
     backgroundColor:'black',
-    borderRadius:40,
+    borderRadius:windowHeight/20,
 }
 })
 

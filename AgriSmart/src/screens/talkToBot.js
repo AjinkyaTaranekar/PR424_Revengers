@@ -3,10 +3,11 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import React from 'react'
 
 export default function talkToBot() {
+    console.log("Here you can talk to Taniya")
     const [messages,onSend] = React.useState([
         {
             _id: 1,
-            text: `Hi! I am the FAQ bot 🤖 from Jscrambler.\n\nHow may I help you with today?`,
+            text: `Hi! I am Tanya 🤖 from AgriSmart.\n\nHow may I help you with today?`,
             createdAt: new Date(),
             user: {
               _id: 2,
