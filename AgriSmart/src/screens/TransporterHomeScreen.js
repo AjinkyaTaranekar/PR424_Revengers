@@ -133,6 +133,7 @@ const TransporterHomeScreen = ({navigation}) => {
         backdropStyle={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
         <Card disabled={true}>
           <Text style = {{color: 'red', fontSize: 18 ,alignItems:"center", fontWeight: 'bold'}} >Pooling Request has been Made!</Text>
+          <Image source = {require('../assets/images/truckWithGoods.gif')} style = {{flex: 1, width: 250, height: 250, resizeMode: 'contain' }}/>
           <Button style={{alignItems:"center",width: 150, position: 'absolute',bottom: 50, left: 15}} onPress={() => goToPooling()}>
             Go to Navigation
           </Button>
