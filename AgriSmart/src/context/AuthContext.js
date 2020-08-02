@@ -36,6 +36,7 @@ const tryLocalSignin = (dispatch) => async () => {
 const checkLanguageSelection = (dispatch) => async () => {
   console.log('INSIDE checkLanguageSelection');
   const language = await AsyncStorage.getItem('language');
+  
   if (language) {
     console.log('got language', language);
     dispatch({type: 'language', payload: language});
