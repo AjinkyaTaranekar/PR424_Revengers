@@ -7,15 +7,17 @@ import FindTransporterScreen from '../screens/FindTransporters';
 import PaymentScreen from '../screens/PaymentScreen';
 import NavigateToFarmerScreen from '../screens/NavigateToFarmerScreen';
 import PoolingFarmerNavigationScreen from '../screens/PoolingFarmerNavigation';
-import talkToBot from '../screens/talkToBot'
 
 const mainFlow = createSwitchNavigator({
  
   farmerFlow: createStackNavigator({
     FarmerHome: FarmerHomeScreen,
+<<<<<<< HEAD
     ChatBot:talkToBot,
     FindTransporter: FindTransporterScreen,
     Payment: PaymentScreen
+=======
+>>>>>>> parent of 81cdeaf... Dialog flow implemented partially
   },{
     defaultNavigationOptions: {
       header: null
