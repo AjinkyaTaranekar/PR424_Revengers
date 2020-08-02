@@ -4,6 +4,7 @@ import FarmerHomeScreen from '../screens/FarmerHomeScreen';
 import TransporterHomeScreen from '../screens/TransporterHomeScreen';
 import DrawerNavigation from './drawer'
 import NavigateToFarmerScreen from '../screens/NavigateToFarmerScreen';
+import PoolingFarmerNavigationScreen from '../screens/PoolingFarmerNavigation';
 
 const mainFlow = createSwitchNavigator({
  
@@ -17,6 +18,8 @@ const mainFlow = createSwitchNavigator({
   transporterFlow: createStackNavigator({
     TransporterHome: TransporterHomeScreen,
     Navigate: NavigateToFarmerScreen,
+    Pooling: PoolingFarmerNavigationScreen
+
   },{
     defaultNavigationOptions: {
       header: null
