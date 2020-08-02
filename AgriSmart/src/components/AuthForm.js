@@ -66,7 +66,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
                     autoCapitalize="none"
                     autoCorrect={false}
                     value={password}
-                    onChangeText={(newOtp) => setOtp(newOtp)}
+                    onChangeText={(password) => setPassword(password)}
                     placeholderTextColor={'rgba(255,255,255,1)'}
                     underlineColorAndroid='transparent'
             >
