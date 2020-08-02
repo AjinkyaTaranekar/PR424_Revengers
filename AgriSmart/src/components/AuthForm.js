@@ -30,6 +30,11 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
     setVisible(false);
     onSubmit({ phoneno, password });
   };
+  const changePassword = (phoneno,password)=>{
+    setNewPassword(false);
+    // Tobe defined later
+    onSubmit();
+  }
   const secureTextEntry = true;
   return (
     <ImageBackground source={require('../assets/images/background.jpg')} style={styles.backgroundContainer}>
@@ -61,7 +66,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
                     autoCapitalize="none"
                     autoCorrect={false}
                     value={password}
-                    onChangeText={(newPassword) => setPassword(newPassword)}
+                    onChangeText={(newOtp) => setOtp(newOtp)}
                     placeholderTextColor={'rgba(255,255,255,1)'}
                     underlineColorAndroid='transparent'
             >
@@ -81,10 +86,21 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
               backdropStyle={styles.backdrop}
               onBackdropPress={() => setVisible(false)}>
               <Card disabled={true}>
-                <Text>Welcome to UI Kitten 😻</Text>
-                <Button onPress={() => setNewPassword(false)}>
-                  DISMISS
-                </Button>
+                <TextInput  style={styles.input}
+                  secureTextEntry={secureTextEntry}
+                  lable="Enter OTP"
+                  placeholder="Enter OTP"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  value={otp}
+                  onChangeText={(newOtp) => setOtp(newOtp)}
+                  placeholderTextColor={'rgba(255,255,255,1)'}
+                  underlineColorAndroid='transparent'
+                ></TextInput>
+                <Spacer/>
+                {/* <Button disabled={otp ? false: true} onPress={() => {generatedOTP.toString() == otp ? changePassword(phoneno,password): Alert.alert('Please Enter Correct OTP.')}}>
+                  Verify OTP
+                </Button> */}
               </Card>
             </Modal>
           </View>
