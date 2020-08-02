@@ -4,7 +4,7 @@ import createDataContext from './createDataContext';
 import {AsyncStorage, Alert} from 'react-native';
 import trackerApi from '../api/tracker';
 import {navigate} from '../navigationRef';
-
+import notify from '../services/NotificationService';
 
 
 
@@ -97,7 +97,7 @@ const tryLocalSignin = (dispatch) => async () => {
 };
 const checkLanguageSelection = (dispatch) => async () => {
   console.log('INSIDE checkLanguageSelection');
-  
+  notify.onPressSendNotification("Welcome to AgriSmart 😊", "Get a ride on demand 🚚");
   const language = await AsyncStorage.getItem('language');
   if (language) {
     console.log('got language', language);
@@ -290,6 +290,7 @@ const signin = (dispatch) => {
 
 const signout = (dispatch) => async () => {
   console.log("logout");
+  notify.onPressSendNotification("Bye Bye!!", "Have a Nice Day");
 
   await AsyncStorage.removeItem('token');
   dispatch({type: 'signout'});
