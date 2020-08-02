@@ -27,6 +27,7 @@ const FarmerHomeScreen = ({navigation}) => {
   const [distance, setDistance] = new useState(0);
   const [visible, setVisible] = React.useState(false);
   const [weight, setWeight] = new useState("");
+  const [name, setName] = new useState("");
   const minMaxPickerState = useDatepickerState();
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const load = [ "Grains", "Fruits/Vegetable"];
@@ -94,6 +95,16 @@ const FarmerHomeScreen = ({navigation}) => {
             <SelectItem title='Grains'/>
             <SelectItem title='Fruit / Vegetable'/>
           </Select>
+          <Spacer></Spacer>
+          <Text h4>Enter load name</Text>
+          <Input
+            autoCapitalize="none"
+            autoCorrect={false}
+            status='primary'
+            placeholder="Enter load name"
+            value={name}
+            onChangeText={(newName) => setName(newName)}
+          ></Input>
           <Spacer></Spacer>
           <Text h4>Select date of delivery</Text>
           <Datepicker
