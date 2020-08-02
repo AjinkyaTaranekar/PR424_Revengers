@@ -19,6 +19,7 @@ const FarmerHomeScreen = ({navigation}) => {
   const [distance, setDistance] = new useState(0);
   const [visible, setVisible] = React.useState(false);
   const [weight, setWeight] = new useState("");
+  const [volume, setVolume] = new useState("");
   const minMaxPickerState = useDatepickerState();
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const load = [ "Grains", "Fruits", "Vegetable"];
@@ -96,10 +97,19 @@ const FarmerHomeScreen = ({navigation}) => {
             keyboardType={'numeric'}
             onChangeText={(newWeight) => setWeight(newWeight)}
           ></Input>
+          <Text h4>Enter the volume in m^3</Text>
+          <Input
+            autoCapitalize="none"
+            autoCorrect={false}
+            status='primary'
+            placeholder="Enter volume"
+            value={volume}
+            keyboardType={'numeric'}
+            onChangeText={(newVolume) => setVolume(newVolume)}
+          ></Input>
           <Spacer></Spacer>
           
-  
-          <Button disabled={weight && selectedIndex && minMaxPickerState.date ? false: true} onPress={() => {createBooking(minMaxPickerState.date,weight,selectedIndex)}}>
+          <Button disabled={weight && selectedIndex && volume && minMaxPickerState.date ? false: true} onPress={() => {createBooking(minMaxPickerState.date,weight,selectedIndex)}}>
             Create Booking
           </Button>
         </Card>
