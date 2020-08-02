@@ -9,7 +9,7 @@ import NavigateToFarmerScreen from '../screens/NavigateToFarmerScreen';
 import PoolingFarmerNavigationScreen from '../screens/PoolingFarmerNavigation';
 
 const mainFlow = createSwitchNavigator({
- 
+
   farmerFlow: createStackNavigator({
     FarmerHome: FarmerHomeScreen,
 <<<<<<< HEAD
