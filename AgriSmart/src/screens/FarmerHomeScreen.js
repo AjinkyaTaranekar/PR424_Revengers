@@ -31,13 +31,10 @@ const FarmerHomeScreen = ({navigation}) => {
   const [visible, setVisible] = React.useState(false);
   const [weight, setWeight] = new useState("");
 <<<<<<< HEAD
-<<<<<<< HEAD
   const [name, setName] = new useState("");
 =======
   const [volume, setVolume] = new useState("");
 >>>>>>> parent of 347fa81... added chatbot support initial
-=======
->>>>>>> parent of b309ab7... Merge branch 'master' of https://github.com/AjinkyaTaranekar/PR424_Revengers
   const minMaxPickerState = useDatepickerState();
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const load = [ "Grains", "Fruits", "Vegetable"];
@@ -96,6 +93,16 @@ const FarmerHomeScreen = ({navigation}) => {
             <SelectItem title='Fruit'/>            
             <SelectItem title='Vegetable'/>
           </Select>
+          <Spacer></Spacer>
+          <Text h4>Enter load name</Text>
+          <Input
+            autoCapitalize="none"
+            autoCorrect={false}
+            status='primary'
+            placeholder="Enter load name"
+            value={name}
+            onChangeText={(newName) => setName(newName)}
+          ></Input>
           <Spacer></Spacer>
           <Text h4>Select date of delivery</Text>
           <Datepicker
