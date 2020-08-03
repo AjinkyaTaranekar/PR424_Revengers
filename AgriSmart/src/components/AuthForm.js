@@ -85,6 +85,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
             >{submitButtonText}</Button>
             {submitButtonText==="Sign In"?<Button
              
+             disabled={phoneno?false:true}
               onPress={()=> {generatedAOTP()}}
             >Reset Password</Button>:null}
             <Modal
