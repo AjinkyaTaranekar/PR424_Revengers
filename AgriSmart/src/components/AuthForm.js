@@ -74,7 +74,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
             </TextInput>
           </View>
           <View>
-          {headerText === "Sign In AgriSmart" ?<TouchableOpacity onPress={()=>{
+          {headerText === "Sign In AgriSmart" || headerText === "साइन इन करें" ?<TouchableOpacity onPress={()=>{
             setNewPassword(true)
           }}>
               <Text style={styles.forgotPassword}>

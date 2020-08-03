@@ -10,7 +10,7 @@ export default talkToBot = () => {
     const BOT_USER = {
       _id: 2,
       name: 'AgriBot',
-      avatar: 'https://i.imgur.com/7k12EPD.png'
+      avatar: 'https://cdn.dribbble.com/users/722835/screenshots/4082720/bot_icon.gif'
     };
     
     
