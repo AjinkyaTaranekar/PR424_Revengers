@@ -68,7 +68,6 @@ class PaymentScreen extends Component {
             return [];
           }
         });
-        console.log(originRoute)
         let destApiUrl =
         'https://api.tomtom.com/routing/1/calculateRoute/' +
          + last['latitude'] +',' + last['longitude'] + destFarm + 
@@ -101,9 +100,7 @@ class PaymentScreen extends Component {
             return [];
           }
         });
-        console.log("dest route", destRoute)
         let route = originRoute.concat(destRoute);
-        console.log("final route \n",route)
         this.setState({...this.state,distance: distance});      
         this.setState({...this.state,coordinates: route});
     }
