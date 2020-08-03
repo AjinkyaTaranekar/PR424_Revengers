@@ -6,9 +6,11 @@
 
 
 import  React, {Component} from 'react'
-import { ToastAndroid } from 'react-native';
+import { ToastAndroid, AsyncStorage } from 'react-native';
 // toast android module  enables us to show a small message
 // on the screen similar to a pop-up notification.
+
+import firebase from 'react-native-firebase';
 
 class BookingService extends Component {
   constructor(props){
@@ -157,7 +159,7 @@ class BookingService extends Component {
     drivers: [
       {
           "name": "Taranekar",
-          // "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZjA0Yjg0MGZjNWI0NTAwMjQzNWExYWQiLCJpYXQiOjE1OTUzNTgwMTB9.kvXUHoBtv51_lDjNI2CbNBGnKjiX_kLZ2fyxt2mUacY",
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZjA0Yjg0MGZjNWI0NTAwMjQzNWExYWQiLCJpYXQiOjE1OTUzNTgwMTB9.kvXUHoBtv51_lDjNI2CbNBGnKjiX_kLZ2fyxt2mUacY",
           "contactDetails": {
             "phoneno": "952417890",
             "email": "aj@gmail.com",
@@ -176,7 +178,7 @@ class BookingService extends Component {
           "shippingDetails": {
             "grainType": "Fruits/Vegetable",
             "dateOfDelivery": "13/12/2020",
-            "weight": 2000,
+            "weight": 200,
           },
           "reqStatus": "True",
           "timeStamp": "1234",
@@ -208,6 +210,7 @@ class BookingService extends Component {
       },
       {
           "name": "Nandwal",
+          "fcmToken": "dBLb9bi4QwiHNzwIBsMvwB:APA91bG2C0GQ2fWAYiW3fxWv7HDhWJoqvFsgmUPMAKzh0ArrmivBLzmP3tiz9o-xx1Vo95GN0K5kqtD7mEAbfUqlkItR80_G3HG97wpqcP8h8pKN85B3f_QPx7xte7csobftid9isA8d",
           "contactDetails": {
             "phoneno": "952417890",
             "email": "aj@gmail.com",
@@ -215,8 +218,8 @@ class BookingService extends Component {
           },
           "locations": {
             "origin": {
-                latitude: 22.6467289,
-                longitude: 75.8763559
+              latitude: 22.6467289,
+              longitude: 75.83233559
             },
             "destination": {
               latitude: 22.7021334,
@@ -341,6 +344,65 @@ class BookingService extends Component {
     }
   }
   
+  sendRequest = async (location,type,weight,driverFCM) => {
+    const FIREBASE_API_KEY = "AAAAaTaihNQ:APA91bGXXZmDPPHMinrSOX5T8eab-6t9uLka0anuk8EsDBBpDZOCrSI8oRHsmrdPlxW6Xzm8O8p-Iuygc2WTLWmAZktBKAYgFZEJMYgfxaSqqDMqa_1bJ8CrQpgIlljiDkR-pMws4ofW"
+    console.log("initial", driverFCM)
+    const farmerFCM = await AsyncStorage.getItem('fcmtoken')
+    const name = await AsyncStorage.getItem('name')
+    const mobile = await AsyncStorage.getItem('phoneno')
+    const otp = await AsyncStorage.getItem('permanentOTP')
+    console.log("here")
+    const message = {
+      registration_ids: [
+        driverFCM
+      ],
+      notification: {
+        title: "AgriSmart",
+        body: "Farmer Request Available",
+        vibrate: 1,
+        sound: 1,
+        show_in_foreground: true,
+        priority: "high",
+        content_available: true,
+      },
+      data: {
+        title: name ,
+        mobile: mobile,
+        OLat: location['origin']['latitute'],
+        OLon: location['origin']['longitude'],
+        DLat: location['destination']['latitute'],
+        DLon: location['destination']['longitude'],
+        type: type,
+        weight: weight,
+        otp: otp,
+        farmerFCM: farmerFCM,
+      },
+    }
+    console.log("now here")
+    let headers = new Headers({
+      "Content-Type": "application/json",
+      Authorization: "key=" + FIREBASE_API_KEY,
+    })
+    console.log("now here here")
+    
+    let response = await fetch("https://fcm.googleapis.com/fcm/send", {
+      method: "POST",
+      headers,
+      body: JSON.stringify(message),
+    })
+    console.log("now here 3")
+    //response = await response.json()
+    console.log(response)
+    this.listen = firebase
+      .notifications()
+      .onNotification(notification => {
+        notification.android.setChannelId('test-channel');
+        if (notification.body == "Driver Accepted \n Happy Journey")
+          return true
+      });
+    return false
+  }
+
   // Now the find driver function is checked with the corressponding parameters of location,type of goods and weight of goods
   findDrivers(location, type, weight){
     for (let driver of this.state.drivers){
@@ -348,9 +410,11 @@ class BookingService extends Component {
         if (driver["reqStatus"] && 
             type == driver["shippingDetails"]["grainType"] && 
             parseInt(weight) <=  driver["shippingDetails"]["weight"] && 
-            this.getDistance(location, driver["locations"]["origin"]) <= 30 ){
-              driver["reqStatus"] = false
-              return driver;
+            this.getDistance(location, driver["locations"]["origin"]) <= 50 ){
+              if (this.sendRequest(location,type,weight, driver["fcmToken"])){
+                driver["reqStatus"] = false
+                return driver;
+              }
             }
     }
       // corressponding conditions are checked and they are returned accordingly
