@@ -21,8 +21,9 @@ const value = async () => {
 
 const NameInputScreen = () => {
 
-  const navigateDetails = (name) => {
+  const navigateDetails = async(name) => {
     // send name to database.
+    await AsyncStorage.setItem('name',name)
     navigate('UploadProfilePic');
   };
   

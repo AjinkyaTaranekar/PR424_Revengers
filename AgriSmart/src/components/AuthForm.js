@@ -1,6 +1,6 @@
  
 import React, { useState, useContext} from "react";
-import { View,TextInput ,StyleSheet, Image, Alert ,Dimensions,ImageBackground,TouchableOpacity} from "react-native";
+import { View,TextInput ,StyleSheet, Image, Alert ,Dimensions,ImageBackground,TouchableOpacity, AsyncStorage} from "react-native";
 import { Text, Input } from "react-native-elements";
 import Spacer from "./Spacer";
 import { Button, Card, Modal,} from '@ui-kitten/components';
@@ -26,10 +26,17 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
     console.log("responser",response);
   };  
 
-  const signUp = (phoneno,password) => {
+  const signUp = async(phoneno,password) => {
     setVisible(false);
+    AsyncStorage.setItem('phoneno',phoneno)
     onSubmit({ phoneno, password });
   };
+  const signIn = async(phoneno,password) => {
+    setVisible(false);
+    AsyncStorage.setItem('phoneno',phoneno)
+    onSubmit({ phoneno, password });
+  };
+  
   const changePassword = (phoneno,password)=>{
     setNewPassword(false);
     // Tobe defined later
@@ -111,7 +118,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
             ) : null}
             <Button
               disabled={phoneno && password ? false: true}
-              onPress={submitButtonText == 'Sign In' ? () => onSubmit({ phoneno, password }): generatedAOTP}
+              onPress={submitButtonText == 'Sign In' ? () => signIn(phoneno,password): generatedAOTP}
             >{submitButtonText}</Button>
             <Modal
               visible={visible}
