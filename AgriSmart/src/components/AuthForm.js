@@ -27,6 +27,11 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
     AsyncStorage.setItem('phoneno',phoneno)
     onSubmit({ phoneno, password });
   };
+  const signIn = async(phoneno,password) => {
+    setVisible(false);
+    AsyncStorage.setItem('phoneno',phoneno)
+    onSubmit({ phoneno, password });
+  };
   const secureTextEntry = true;
   return (
     <ImageBackground source={require('../assets/images/background.jpg')} style={styles.backgroundContainer}>
