@@ -21,7 +21,7 @@ const sendVerificationMessage = (dispatch) => {
       try {
         console.log(otp,phoneno);
         if (phoneno) {
-          console.log(`https://api.textlocal.in/send/?apikey=OghcDXlOpPU-6D7I5qfvmzkhuP7Z98POefuKz0Q3mz&numbers=91${phoneno}&message=Your+AgriSmart+verification+code+is+${otp}&sender=TXTLCL`);
+          // console.log(`https://api.textlocal.in/send/?apikey=OghcDXlOpPU-6D7I5qfvmzkhuP7Z98POefuKz0Q3mz&numbers=91${phoneno}&message=Your+AgriSmart+verification+code+is+${otp}&sender=TXTLCL`);
           var xhr = new XMLHttpRequest();
           xhr.open('GET', `https://api.textlocal.in/send/?apikey=OghcDXlOpPU-6D7I5qfvmzkhuP7Z98POefuKz0Q3mz&numbers=91${phoneno}&message=Your+AgriSmart+verification+code+is+${otp}&sender=TXTLCL`, true); 
           xhr.send();

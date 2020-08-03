@@ -10,7 +10,6 @@ const HomeScreen = () => {
     <SafeAreaView forceInset={{top: 'always'}} style={styles.container}>
       <View>
           <Text>This is About Page</Text>
-
       </View>
     </SafeAreaView>
   );

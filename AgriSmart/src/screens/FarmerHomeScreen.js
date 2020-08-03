@@ -67,7 +67,7 @@ const FarmerHomeScreen = ({navigation}) => {
       </TouchableOpacity>
       <View>
         <TouchableOpacity style={styles.chatBot} onPress={ () => navigate("ChatBot")}>
-          <Text style={{fontSize:50,alignContent:"center"}}>🤖</Text>
+          <Text style={{fontSize:50,alignContent:"center",marginBottom:windowWidth/30}}>🤖</Text>
         </TouchableOpacity>
       </View>
       <Button 
