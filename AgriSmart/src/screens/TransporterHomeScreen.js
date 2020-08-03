@@ -25,13 +25,17 @@ const TransporterHomeScreen = ({navigation}) => {
   };
   createBooking = async () => {
     setVisible(false);
+    notify.onPressSendNotification("Ride with AgriSmart 🚛", "Searching for  👨‍🌾 farmers Nearby");
     var farmer = booking.findFarmers({latitude: origin.lat, longitude: origin.lon},load[selectedIndex-1],weight);
     console.log("farmer",farmer);
-  };
+    if(Object.keys(farmer).length !== 0)
+      navigate('Navigate',{farmerAvailable: farmer, driver: [{"locations":{origin: {latitude: origin.lat, longitude: origin.lon}}}]});
+ };
 
   const goToPooling = async () => {
     setPool(false);
     const result = booking.pooling();
+    notify.onPressSendNotification("Ride with AgriSmart 🚛", "Keep your Driving Licence, \nHappy Journey!! 😄😄");
     const token = await AsyncStorage.getItem('token');
     console.log(token)
     var user,farmer;
