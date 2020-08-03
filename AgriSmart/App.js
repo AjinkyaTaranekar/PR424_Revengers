@@ -144,7 +144,7 @@ class App extends Component<Props> {
     },
     "shippingDetails": {
       "grainType": data.load,"weight": data.weight,
-    }}, driver: [{"locations":{origin: {latitude: currentLat, longitude: currentLong}}}]});
+    }}, driver: [{"locations":{origin: {latitude: this.state.currentLat, longitude: this.state.currentLong}}}]});
     this.sendRequest("Driver Accepted \n Happy Journey",data.farmerFCM)
   };
 
