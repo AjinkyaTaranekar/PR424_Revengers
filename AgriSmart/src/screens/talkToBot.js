@@ -1,26 +1,71 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
-import React from 'react'
+import React,{useEffect,useState,useCallback} from 'react'
+import { Dialogflow_V2 } from 'react-native-dialogflow';
+import { dialogflowConfig } from '../../env';
 
-export default function talkToBot() {
-    console.log("Here you can talk to Taniya")
-    const [messages,onSend] = React.useState([
-        {
-            _id: 1,
-            text: `Hi! I am Tanya 🤖 from AgriSmart.\n\nHow may I help you with today?`,
-            createdAt: new Date(),
-            user: {
-              _id: 2,
-              name: 'FAQ Bot',
-              avatar: 'https://i.imgur.com/7k12EPD.png'
-            }
-          }
-    ])
+export default talkToBot = () => {
+    console.log("Here you can talk to Veronica")
+    
+    const BOT_USER = {
+      _id: 2,
+      name: 'AgriBot',
+      avatar: 'https://i.imgur.com/7k12EPD.png'
+    };
+    
+    
+    const [messages, setMessages] = useState([{
+      _id: 1,
+      text: 'Hi I am Veronica Your Personal Assistant Say Hi!',
+      createdAt: new Date(),
+      user: BOT_USER
+    },]);
+
+    useEffect(() => {
+      Dialogflow_V2.setConfiguration(
+        dialogflowConfig.client_email,
+        dialogflowConfig.private_key,
+        Dialogflow_V2.LANG_ENGLISH_US,
+        dialogflowConfig.project_id
+      );
+      // setMessages([])
+      console.log("TEST",messages)
+    }, [messages])
+
+
+    const onSend = useCallback((newMessage=[]) => {
+      console.log(messages);
+      console.log(newMessage);
+      setMessages(prevMessages => [...newMessage,...prevMessages])
+      let message = newMessage[0].text;
+      Dialogflow_V2.requestQuery(
+        message,
+        result => handleGoogleResponse(result),
+        error => console.log(error)
+      );
+    },[messages])
+
+
+    const handleGoogleResponse = (result)=> {
+      let text = result.queryResult.fulfillmentMessages[0].text.text[0];
+      sendBotResponse(text);
+    }
+
+    const sendBotResponse = (text) =>{
+      console.log(messages)
+        let msg = {
+          _id: messages.length + 1,
+          text,
+          createdAt: new Date(),
+          user: BOT_USER
+        };
+        setMessages(prevMessages => [msg,...prevMessages])
+      }
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <GiftedChat
           messages={messages}
-          onSend={message => onSend(messages.push(message))}
+          onSend={message => onSend(message)}
           user={{
             _id: 1
           }}

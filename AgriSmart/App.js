@@ -39,7 +39,10 @@ class App extends Component<Props> {
     currentLong: 0,
   }
   getToken = async () => {
-    let fcmToken = false
+    // let fcmToken = await AsyncStorage.getItem('fcmToken');
+    let fcmToken = false;
+
+    console.log('fcmtoken',fcmToken)
     if (!fcmToken) {
       fcmToken = await firebase.messaging().getToken();
       console.log('fcmtoken',fcmToken)
