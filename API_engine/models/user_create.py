@@ -17,4 +17,3 @@ class UserCreate(UserUpdate):
     password: str = UserFields.password
     role: str = UserFields.role
     address: Address = UserFields.address
-    # Birth remains Optional, so is not required to re-declare

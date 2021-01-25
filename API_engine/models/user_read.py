@@ -39,4 +39,4 @@ class UserRead(UserCreate):
         extra = pydantic.Extra.ignore  # if a read document has extra fields, ignore them
 
 
-UserRead = List[UserRead]
+UserRead = List[UserRead] = []
