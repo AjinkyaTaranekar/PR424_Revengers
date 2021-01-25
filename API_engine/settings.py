@@ -15,7 +15,7 @@ class BaseSettings(pydantic.BaseSettings):
 
 class APISettings(BaseSettings):
     title: str = "Robot Banao API"
-    host: str = "localhost"
+    host: str = "0.0.0.0"
     port: int = 5000
     log_level: str = "INFO"
 
