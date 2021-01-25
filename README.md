@@ -1,6 +1,4 @@
-# FastAPI + Pydantic + MongoDB REST API Example
-
-Sample API using FastAPI, Pydantic models and settings, and MongoDB as database - non-async.
+# Robot Banao API
 
 The API works with a single entity, "User" (or "users" in plural) that gets stored on a single Mongo database and collection.
 
@@ -42,22 +40,3 @@ Endpoints define the whole CRUD operations that can be performed on User entitie
 - Python >= 3.7
 - Requirements listed on [requirements.txt](requirements.txt)
 - Running MongoDB server
-
-## make tools
-
-```bash
-# Install requirements
-make install-requirements
-
-# Run the app (available at http://localhost:5000/...)
-make run
-
-# Install test requirements
-make install-test-requirements
-
-# Start MongoDB for tests (requires Docker)
-make start-test-mongo
-
-# Run the tests
-make test
-```
