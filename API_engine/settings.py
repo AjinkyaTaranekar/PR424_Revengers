@@ -24,7 +24,7 @@ class APISettings(BaseSettings):
 
 
 class MongoSettings(BaseSettings):
-    uri: str = "mongodb://40.121.15.69:5001"
+    uri: str = "mongodb://127.0.0.1:5001"
     database: str = "robot_banao"
 
     class Config(BaseSettings.Config):
