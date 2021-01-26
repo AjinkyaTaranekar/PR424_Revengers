@@ -56,6 +56,14 @@ def _get_user(user_id: str):
 def _create_user(create: UserCreate):
     return UsersRepository.create(create)
 
+@app.post(
+    "/users/login",
+    description="Login into system",
+    responses=get_exception_responses(UserNotFoundException),
+    tags=["users"]
+)
+def _login_user(email: str, password: str):
+    return UsersRepository.login(email,password)
 
 @app.patch(
     "/users/{user_id}",

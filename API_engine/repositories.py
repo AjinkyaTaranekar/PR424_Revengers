@@ -2,6 +2,9 @@
 Methods to interact with the database
 """
 
+# # Installed # #
+import bcrypt
+
 # # Package # #
 from .models import *
 from .exceptions import *
@@ -19,6 +22,19 @@ class UsersRepository:
         if not document:
             raise UserNotFoundException(user_id)
         return UserRead(**document)
+    
+    @staticmethod
+    def login(email: str, password: str):
+        """Retrieve a single User by its unique id"""
+        document = users.find_one({"email": email})
+        if not document:
+            raise UserNotFoundException(email)
+        if bcrypt.hashpw(password.encode('utf-8'), document['password']) != document['password']:
+            raise InvalidUserPasswordException(email)
+        return {
+            "role": document["role"],
+            "email": document["email"]
+            }
 
     @staticmethod
     def list() -> UsersRead:
@@ -32,6 +48,8 @@ class UsersRepository:
         document = create.dict()
         document["created"] = document["updated"] = get_time()
         document["_id"] = get_uuid()
+        document["password"] = bcrypt.hashpw(document["password"].encode('utf-8'), bcrypt.gensalt())
+
         # The time and id could be inserted as a model's Field default factory,
         # but would require having another model for Repository only to implement it
 

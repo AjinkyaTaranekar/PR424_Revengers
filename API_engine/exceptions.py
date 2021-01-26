@@ -18,8 +18,8 @@ from .models.errors import *
 __all__ = (
     "BaseAPIException", "BaseIdentifiedException",
     "NotFoundException", "AlreadyExistsException",
-    "UserNotFoundException", "UserAlreadyExistsException",
-    "get_exception_responses"
+    "UserNotFoundException", "InvalidUserPasswordException", 
+    "UserAlreadyExistsException", "get_exception_responses"
 )
 
 
@@ -75,6 +75,10 @@ class AlreadyExistsException(BaseIdentifiedException):
 class UserNotFoundException(NotFoundException):
     """Error raised when a user does not exist"""
     message = "The user does not exist"
+
+class InvalidUserPasswordException(NotFoundException):
+    """Error raised when a user/password is incorrect"""
+    message = "The user/password is incorrect"
 
 
 class UserAlreadyExistsException(AlreadyExistsException):

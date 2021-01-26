@@ -29,5 +29,5 @@ class UserUpdate(BaseModel):
         # TODO Better way to do this? (automatic conversion can be done with Config.json_encoders, but not available for dict
         d = super().dict(**kwargs)
         with suppress(KeyError):
-            d["birth"] = d.pop("birth").isoformat()
+            d["birth"] = d.pop("birth").isoformat()    
         return d

@@ -3,3 +3,4 @@ uvicorn
 pymongo
 python-dateutil
 python-dotenv
+bcrypt
