@@ -8,10 +8,10 @@ import bcrypt
 # # Package # #
 from .models import *
 from .exceptions import *
-from .database import users
+from .database import users, enterprises
 from .utils import get_time, get_uuid
 
-__all__ = ("UsersRepository",)
+__all__ = ("UsersRepository","EnterpriseRepository",)
 
 
 class UsersRepository:
@@ -74,3 +74,50 @@ class UsersRepository:
         result = users.delete_one({"_id": user_id})
         if not result.deleted_count:
             raise UserNotFoundException(identifier=user_id)
+
+class EnterpriseRepository:
+    @staticmethod
+    def get(enterprise_id: str) -> EnterpriseRead:
+        """Retrieve a single Enterprise by its unique id"""
+        document = enterprises.find_one({"_id": enterprise_id})
+        if not document:
+            raise EnterpriseNotFoundException(enterprise_id)
+        return EnterpriseRead(**document)
+    
+    @staticmethod
+    def list() -> EnterprisesRead:
+        """Retrieve all the available enterprises"""
+        cursor = enterprises.find()
+        return [EnterpriseRead(**document) for document in cursor]
+
+    @staticmethod
+    def create(create: EnterpriseCreate) -> EnterpriseRead:
+        """Create a enterprise and return its Read object"""
+        document = create.dict()
+        document["created"] = document["updated"] = get_time()
+        document["_id"] = get_uuid()
+        
+        # The time and id could be inserted as a model's Field default factory,
+        # but would require having another model for Repository only to implement it
+
+        result = enterprises.insert_one(document)
+        assert result.acknowledged
+
+        return EnterpriseRepository.get(result.inserted_id)
+
+    @staticmethod
+    def update(enterprise_id: str, update: EnterpriseUpdate):
+        """Update a enterprise by giving only the fields to update"""
+        document = update.dict()
+        document["updated"] = get_time()
+
+        result = enterprises.update_one({"_id": enterprise_id}, {"$set": document})
+        if not result.modified_count:
+            raise EnterpriseNotFoundException(identifier=enterprise_id)
+
+    @staticmethod
+    def delete(enterprise_id: str):
+        """Delete a enterprise given its unique id"""
+        result = enterprises.delete_one({"_id": enterprise_id})
+        if not result.deleted_count:
+            raise EnterpriseNotFoundException(identifier=enterprise_id)

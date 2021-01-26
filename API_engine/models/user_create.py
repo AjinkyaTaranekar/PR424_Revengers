@@ -4,7 +4,7 @@ User Create model. Inherits from UserUpdate, but all the required fields must be
 
 # # Package # #
 from .user_update import UserUpdate
-from .user_address import Address
+from .address import Address
 from .fields import UserFields
 
 __all__ = ("UserCreate",)

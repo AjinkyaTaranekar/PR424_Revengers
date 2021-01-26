@@ -11,7 +11,7 @@ from contextlib import suppress
 # # Package # #
 from .common import BaseModel
 from .fields import UserFields
-from .user_address import Address
+from .address import Address
 
 __all__ = ("UserUpdate",)
 

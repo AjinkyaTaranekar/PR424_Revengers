@@ -10,7 +10,7 @@ from fastapi import status as statuscode
 # # Package # #
 from .models import *
 from .exceptions import *
-from .repositories import UsersRepository
+from .repositories import UsersRepository, EnterpriseRepository
 from .middlewares import request_handler
 from .settings import api_settings as settings
 
@@ -85,6 +85,59 @@ def _update_user(user_id: str, update: UserUpdate):
 )
 def _delete_user(user_id: str):
     UsersRepository.delete(user_id)
+
+@app.get(
+    "/enterprises",
+    description="List all the available enterprises",
+    tags=["enterprises"]
+)
+def _list_enterprises():
+    # TODO Filters
+    return EnterpriseRepository.list()
+
+
+@app.get(
+    "/enterprises/{enterprise_id}",
+    response_model=EnterpriseRead,
+    description="Get a single enterprise by its unique ID",
+    responses=get_exception_responses(EnterpriseNotFoundException),
+    tags=["enterprises"]
+)
+def _get_enterprise(enterprise_id: str):
+    return EnterpriseRepository.get(enterprise_id)
+
+
+@app.post(
+    "/enterprises",
+    description="Create a new enterprise",
+    response_model=EnterpriseRead,
+    status_code=statuscode.HTTP_201_CREATED,
+    responses=get_exception_responses(EnterpriseAlreadyExistsException),
+    tags=["enterprises"]
+)
+def _create_enterprise(create: EnterpriseCreate):
+    return EnterpriseRepository.create(create)
+
+@app.patch(
+    "/enterprises/{enterprise_id}",
+    description="Update a single enterprise by its unique ID, providing the fields to update",
+    status_code=statuscode.HTTP_204_NO_CONTENT,
+    responses=get_exception_responses(EnterpriseNotFoundException, EnterpriseAlreadyExistsException),
+    tags=["enterprises"]
+)
+def _update_enterprise(enterprise_id: str, update: EnterpriseUpdate):
+    EnterpriseRepository.update(enterprise_id, update)
+
+
+@app.delete(
+    "/enterprises/{enterprise_id}",
+    description="Delete a single enterprise by its unique ID",
+    status_code=statuscode.HTTP_204_NO_CONTENT,
+    responses=get_exception_responses(EnterpriseNotFoundException),
+    tags=["enterprises"]
+)
+def _delete_enterprise(enterprise_id: str):
+    EnterpriseRepository.delete(enterprise_id)
 
 
 def run():

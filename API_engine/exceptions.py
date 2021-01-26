@@ -19,7 +19,8 @@ __all__ = (
     "BaseAPIException", "BaseIdentifiedException",
     "NotFoundException", "AlreadyExistsException",
     "UserNotFoundException", "InvalidUserPasswordException", 
-    "UserAlreadyExistsException", "get_exception_responses"
+    "UserAlreadyExistsException", "get_exception_responses",
+    "EnterpriseNotFoundException", "EnterpriseAlreadyExistsException"
 )
 
 
@@ -80,11 +81,17 @@ class InvalidUserPasswordException(NotFoundException):
     """Error raised when a user/password is incorrect"""
     message = "The user/password is incorrect"
 
-
 class UserAlreadyExistsException(AlreadyExistsException):
     """Error raised when a user already exists"""
     message = "The user already exists"
 
+class EnterpriseNotFoundException(NotFoundException):
+    """Error raised when a enterprise does not exist"""
+    message = "The enterprise does not exist"
+
+class EnterpriseAlreadyExistsException(AlreadyExistsException):
+    """Error raised when a enterprise already exists"""
+    message = "The enterprise already exists"
 
 def get_exception_responses(*args: Type[BaseAPIException]) -> dict:
     """Given BaseAPIException classes, return a dict of responses used on FastAPI endpoint definition, with the format:

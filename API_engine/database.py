@@ -13,3 +13,4 @@ __all__ = ("client", "collection")
 
 client = MongoClient(settings.uri)
 users: Collection = client[settings.database][settings.users]
+enterprises: Collection = client[settings.database][settings.enterprises]
