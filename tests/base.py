@@ -10,9 +10,9 @@ import httpx
 from wait4it import wait_for, get_free_port
 
 # # Project # #
-from user_api import run
-from user_api.database import users
-from user_api.settings import api_settings
+from users_api import run
+from users_api.database import users
+from users_api.settings import api_settings
 
 __all__ = ("BaseTest",)
 
@@ -37,7 +37,7 @@ class BaseTest:
 
     @classmethod
     def teardown_method(cls):
-        # Delete all documents from users after each test
+        # Delete all documents from collection after each test
         users.delete_many({})
 
     # # API Methods # #
@@ -47,7 +47,7 @@ class BaseTest:
         assert r.status_code == statuscode, r.text
         return r
 
-    def list_user(self, statuscode: int = 200):
+    def list_users(self, statuscode: int = 200):
         r = httpx.get(f"{self.api_url}/users")
         assert r.status_code == statuscode, r.text
         return r

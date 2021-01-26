@@ -8,10 +8,10 @@ from .exceptions import *
 from .database import users
 from .utils import get_time, get_uuid
 
-__all__ = ("UserRepository",)
+__all__ = ("UsersRepository",)
 
 
-class UserRepository:
+class UsersRepository:
     @staticmethod
     def get(user_id: str) -> UserRead:
         """Retrieve a single User by its unique id"""
@@ -21,7 +21,7 @@ class UserRepository:
         return UserRead(**document)
 
     @staticmethod
-    def list() -> UserRead:
+    def list() -> UsersRead:
         """Retrieve all the available users"""
         cursor = users.find()
         return [UserRead(**document) for document in cursor]
@@ -38,7 +38,7 @@ class UserRepository:
         result = users.insert_one(document)
         assert result.acknowledged
 
-        return UserRepository.get(result.inserted_id)
+        return UsersRepository.get(result.inserted_id)
 
     @staticmethod
     def update(user_id: str, update: UserUpdate):

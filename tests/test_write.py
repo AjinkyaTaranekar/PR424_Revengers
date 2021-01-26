@@ -7,8 +7,8 @@ from datetime import datetime
 from random import randint
 
 # # Project # #
-from user_api.models import *
-from user_api.repositories import UserRepository
+from users_api.models import *
+from users_api.repositories import UsersRepository
 
 # # Installed # #
 import pydantic
@@ -65,14 +65,14 @@ class TestCreate(BaseTest):
 
     def test_timestamp_created_updated(self):
         """Create a user and assert the created and updated timestamp fields.
-        The creation is performed against the UserRepository,
+        The creation is performed against the UsersRepository,
         since mocking the time would not work as the testing API runs on another process"""
         iso_timestamp = "2020-01-01T00:00:00+00:00"
         expected_timestamp = int(datetime.fromisoformat(iso_timestamp).timestamp())
 
         with freeze_time(iso_timestamp):
             create = get_user_create()
-            result = UserRepository.create(create)
+            result = UsersRepository.create(create)
 
         assert result.created == result.updated
         assert result.created == expected_timestamp
@@ -133,7 +133,7 @@ class TestUpdate(BaseTest):
 
     def test_timestamp_updated(self):
         """Update a user and assert the updated timestamp.
-        The update is performed against the UserRepository,
+        The update is performed against the UsersRepository,
         since mocking the time would not work as the testing API runs on another process"""
         iso_timestamp = "2020-04-01T00:00:00+00:00"
         expected_timestamp = int(datetime.fromisoformat(iso_timestamp).timestamp())
@@ -141,7 +141,7 @@ class TestUpdate(BaseTest):
 
         with freeze_time(iso_timestamp):
             update = UserUpdate(name=get_uuid())
-            UserRepository.update(user_id=user.user_id, update=update)
+            UsersRepository.update(user_id=user.user_id, update=update)
 
         read_response = self.get_user(user.user_id)
         read = UserRead(**read_response.json())

@@ -19,9 +19,11 @@ __all__ = ("UserUpdate",)
 class UserUpdate(BaseModel):
     """Body of User PATCH requests"""
     name: Optional[str] = UserFields.name
-    address: Optional[Address] = UserFields.address_update
+    password: Optional[str] = UserFields.password
     role: Optional[str] = UserFields.role
-    
+    address: Optional[Address] = UserFields.address_update
+    birth: Optional[date] = UserFields.birth
+
     def dict(self, **kwargs):
         # The "birth" field must be converted to string (isoformat) when exporting to dict (for Mongo)
         # TODO Better way to do this? (automatic conversion can be done with Config.json_encoders, but not available for dict

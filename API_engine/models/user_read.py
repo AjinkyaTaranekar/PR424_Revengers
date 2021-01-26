@@ -14,15 +14,13 @@ from dateutil.relativedelta import relativedelta
 from .user_create import UserCreate
 from .fields import UserFields
 
-__all__ = ("UserRead", "UserRead")
+__all__ = ("UserRead", "UsersRead")
 
 
 class UserRead(UserCreate):
     """Body of User GET and POST responses"""
     user_id: str = UserFields.user_id
-    email: str = UserFields.email
-    password: str = UserFields.password
-    role: str = UserFields.role
+    age: Optional[int] = UserFields.age
     created: int = UserFields.created
     updated: int = UserFields.updated
 
@@ -35,8 +33,17 @@ class UserRead(UserCreate):
             data["user_id"] = document_id
         return data
 
+    @pydantic.root_validator()
+    def _set_age(cls, data):
+        """Calculate the current age of the user from the date of birth, if any"""
+        birth = data.get("birth")
+        if birth:
+            today = datetime.now().date()
+            data["age"] = relativedelta(today, birth).years
+        return data
+
     class Config(UserCreate.Config):
         extra = pydantic.Extra.ignore  # if a read document has extra fields, ignore them
 
 
-UserRead = List[UserRead] = []
+UsersRead = List[UserRead]

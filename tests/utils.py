@@ -7,9 +7,9 @@ from datetime import datetime
 from random import randint
 
 # # Project # #
-from user_api.models import *
-from user_api.repositories import UserRepository
-from user_api.utils import get_uuid
+from users_api.models import *
+from users_api.repositories import UsersRepository
+from users_api.utils import get_uuid
 
 __all__ = (
     "get_user_create", "get_existing_user",
@@ -37,4 +37,4 @@ def get_user_create(**kwargs):
 
 
 def get_existing_user(**kwargs):
-    return UserRepository.create(get_user_create(**kwargs))
+    return UsersRepository.create(get_user_create(**kwargs))

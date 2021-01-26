@@ -12,5 +12,4 @@ from .settings import mongo_settings as settings
 __all__ = ("client", "collection")
 
 client = MongoClient(settings.uri)
-users: Collection = client[settings.database]["users"]
-orders: Collection = client[settings.database]["orders"]
+users: Collection = client[settings.database][settings.users]

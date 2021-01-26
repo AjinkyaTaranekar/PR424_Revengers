@@ -10,7 +10,7 @@ from fastapi import status as statuscode
 # # Package # #
 from .models import *
 from .exceptions import *
-from .repositories import UserRepository
+from .repositories import UsersRepository
 from .middlewares import request_handler
 from .settings import api_settings as settings
 
@@ -25,13 +25,13 @@ app.middleware("http")(request_handler)
 
 @app.get(
     "/users",
-    response_model=UserRead,
+    response_model=UsersRead,
     description="List all the available users",
     tags=["users"]
 )
-def _list_user():
+def _list_users():
     # TODO Filters
-    return UserRepository.list()
+    return UsersRepository.list()
 
 
 @app.get(
@@ -42,7 +42,7 @@ def _list_user():
     tags=["users"]
 )
 def _get_user(user_id: str):
-    return UserRepository.get(user_id)
+    return UsersRepository.get(user_id)
 
 
 @app.post(
@@ -54,7 +54,7 @@ def _get_user(user_id: str):
     tags=["users"]
 )
 def _create_user(create: UserCreate):
-    return UserRepository.create(create)
+    return UsersRepository.create(create)
 
 
 @app.patch(
@@ -65,7 +65,7 @@ def _create_user(create: UserCreate):
     tags=["users"]
 )
 def _update_user(user_id: str, update: UserUpdate):
-    UserRepository.update(user_id, update)
+    UsersRepository.update(user_id, update)
 
 
 @app.delete(
@@ -76,7 +76,7 @@ def _update_user(user_id: str, update: UserUpdate):
     tags=["users"]
 )
 def _delete_user(user_id: str):
-    UserRepository.delete(user_id)
+    UsersRepository.delete(user_id)
 
 
 def run():

@@ -29,10 +29,10 @@ class TestGet(BaseTest):
 
 
 class TestList(BaseTest):
-    def test_list_user(self):
+    def test_list_users(self):
         """Having multiple users, list all of them.
         Should return all of them in array"""
         users = [get_existing_user() for _ in range(4)]
 
-        response = self.list_user()
+        response = self.list_users()
         assert response.json() == [p.dict() for p in users]
