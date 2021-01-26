@@ -4,15 +4,16 @@ FastAPI app definition, initialization and definition of routes
 
 # # Installed # #
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi import status as statuscode
 
 # # Package # #
 from .models import *
 from .exceptions import *
-from .repositories import UsersRepository, EnterpriseRepository
+from .repositories import UsersRepository, EnterpriseRepository, FileRepository
 from .middlewares import request_handler
 from .settings import api_settings as settings
+
 
 __all__ = ("app", "run")
 
@@ -139,6 +140,35 @@ def _update_enterprise(enterprise_id: str, update: EnterpriseUpdate):
 def _delete_enterprise(enterprise_id: str):
     EnterpriseRepository.delete(enterprise_id)
 
+@app.post(
+    "/uploadfile/admin/",
+    status_code=statuscode.HTTP_201_CREATED,
+    tags=["files"]
+    )
+async def upload_file_admin(file: UploadFile = File(...)):
+    FileRepository.adminUpload(file)
+    return {
+        "filename": file.filename,
+        "status": True
+        }
+
+@app.post(
+    "/uploadfile/manager/",
+    status_code=statuscode.HTTP_201_CREATED,
+    tags=["files"]
+    )
+async def upload_file_manager(purchaseOrder: UploadFile = File(...), quantity: UploadFile = File(...)):
+    FileRepository.managerUpload(purchaseOrder, quantity)
+    return [
+        {
+            "purchaseOrder" : purchaseOrder.filename,
+            "status": True
+        },
+        {
+            "quantity" : quantity.filename,
+            "status": True
+        }
+    ]
 
 def run():
     """Run the API using Uvicorn"""

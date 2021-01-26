@@ -11,7 +11,12 @@ from .exceptions import *
 from .database import users, enterprises
 from .utils import get_time, get_uuid
 
-__all__ = ("UsersRepository","EnterpriseRepository",)
+# # Native # #
+from datetime import datetime
+import shutil
+import os
+
+__all__ = ("UsersRepository","EnterpriseRepository","FileRepository",)
 
 
 class UsersRepository:
@@ -121,3 +126,26 @@ class EnterpriseRepository:
         result = enterprises.delete_one({"_id": enterprise_id})
         if not result.deleted_count:
             raise EnterpriseNotFoundException(identifier=enterprise_id)
+
+class FileRepository:
+    @staticmethod
+    def adminUpload(file):
+        """Files uploaded by admin"""
+        with open("Uploads/admin/"+file.filename, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        
+    @staticmethod
+    def managerUpload(purchase, quantity):
+        """Files uploaded by manager"""
+        today = datetime.now()
+        folder_path = "Uploads/manager/" + today.strftime('%d-%m-%Y %H-%M-%S') 
+        
+        if not os.path.isdir(folder_path):
+            os.mkdir(folder_path)
+        
+        with open(folder_path+"/"+purchase.filename, "wb") as buffer:
+            shutil.copyfileobj(purchase.file, buffer)
+        
+        with open(folder_path+"/"+quantity.filename, "wb") as buffer:
+            shutil.copyfileobj(quantity.file, buffer)
+        
