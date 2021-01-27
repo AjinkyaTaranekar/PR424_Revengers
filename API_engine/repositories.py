@@ -8,7 +8,7 @@ import bcrypt
 # # Package # #
 from .models import *
 from .exceptions import *
-from .database import users, enterprises
+from .database import users, enterprises, manager
 from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing
 
 # # Native # #
@@ -16,7 +16,7 @@ from datetime import datetime
 import shutil
 import os
 
-__all__ = ("UsersRepository","EnterpriseRepository","FileRepository",)
+__all__ = ("UsersRepository","EnterpriseRepository","FileRepository", "PurchaseOrderRepository")
 
 
 class UsersRepository:
@@ -156,3 +156,28 @@ class FileRepository:
             shutil.copyfileobj(quantity.file, buffer)
         managerFilesProcessing(folder_path,purchase.filename, quantity.filename)
         
+
+class PurchaseOrderRepository:
+    @staticmethod
+    def get(purchaseOrder: str) -> PurchaseOrderRead:
+        """Retrieve a single PurchaseOrder by its unique id"""
+        document = manager.find_one({"purchase_order": purchaseOrder})
+        if not document:
+            raise PurchaseOrderNotFoundException(purchaseOrder)
+        return PurchaseOrderRead(**document)
+    
+    @staticmethod
+    def list() -> PurchaseOrdersRead:
+        """Retrieve all the available purchaseOrders"""
+        cursor = manager.find()
+        return [PurchaseOrderRead(**document) for document in cursor]
+
+    @staticmethod
+    def update(purchaseOrder: str, update: PurchaseOrderUpdate):
+        """Update a purchaseOrder by giving only the fields to update"""
+        document = update.dict()
+        document["updated"] = get_time()
+
+        result = manager.update_one({"purchase_order": purchaseOrder}, {"$set": document})
+        if not result.modified_count:
+            raise PurchaseOrderNotFoundException(identifier=purchaseOrder)

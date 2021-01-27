@@ -11,7 +11,7 @@ from pydantic import Field
 # # Package # #
 from ..utils import get_time, get_uuid
 
-__all__ = ("UserFields", "AddressFields", "EnterpriseFields")
+__all__ = ("UserFields", "AddressFields", "EnterpriseFields", "PurchaseOrderFields", "ItemsFields", )
 
 _string = dict(min_length=1)
 """Common attributes for all String fields"""
@@ -113,7 +113,7 @@ class EnterpriseFields:
         min_length=36,
         max_length=36
     )
-    """The enterprise_id is the _id field of Mongo documents, and is set on UsersRepository.create"""
+    """The enterprise_id is the _id field of Mongo documents, and is set on EnterpriseRepository.create"""
 
     created = Field(
         alias="created",
@@ -150,3 +150,85 @@ class AddressFields:
         example="452005",
         **_string
     )
+
+class ItemsFields:
+    asin = Field(
+        description="ASIN of the Item",
+        example="BP*********",
+        **_string
+    )
+    name = Field(
+        description="Name of the item",
+        example="4 x Hub",
+        **_string
+    )
+    inventory = Field(
+        description="Inventory of Item",
+        example="42",
+        **_string
+    )
+    master_sku = Field(
+        description="SKU provided to that item",
+        example="ES-2434",
+        **_string
+    )
+    sku = Field(
+        description="Sub SKU present in Item, if Bundled",
+        example="Indore",
+        **_string
+    )
+    unit_cost = Field(
+        description="Unit Cost of the product on Amazon",
+        example="1000.0",
+        **_string
+    )
+    our_cost = Field(
+        description="Cost of the product",
+        example="1200.0",
+        **_string
+    )
+    quantity = Field(
+        description="Quantity of the product requested",
+        example="45",
+        **_string
+    )
+
+class PurchaseOrderFields:
+    purchase_id = Field(
+        description="Unique identifier of this purchase in the database",
+        example=get_uuid(),
+        min_length=36,
+        max_length=36
+    )
+    """The purchase_id is the _id field of Mongo documents, and is set on PurchaseRepository.create"""
+
+    purchase_order = Field(
+        description="Purchase Order of the purchase",
+        example="XXXXXXXXX",
+    )
+    tracking_id = Field(
+        description="Tracking ID of the purchase",
+        example="XXXXXXXXX",
+        **_string
+    )
+    return_status = Field(
+        description="Return Status of the purchase",
+        example="True",
+        **_string
+    )
+    items = Field(
+        description="Items object where this purchase"
+    )
+    created = Field(
+        alias="created",
+        description="When the user was registered (Unix timestamp)",
+        **_unix_ts
+    )
+    """Created is set on UsersRepository.create"""
+    updated = Field(
+        alias="updated",
+        description="When the user was updated for the last time (Unix timestamp)",
+        **_unix_ts
+    )
+    """Created is set on UsersRepository.update (and initially on create)"""
+

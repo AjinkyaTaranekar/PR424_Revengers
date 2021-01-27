@@ -42,28 +42,28 @@ def adminFilesProcessing(path,export_channel,export_item,pricing):
     # Export Item Master
     eim = pd.read_csv(path+export_item, engine ='python')
 
-    adminFile = pd.DataFrame(columns= ["ASIN", "SKU", "Name", "Our Cost", "Inventory"])
+    adminFile = pd.DataFrame(columns= ["asin", "master_sku" "sku", "name", "our_cost", "inventory"])
     for i in range(len(eci)):
-        adminFile.at[i,"ASIN"] = eci.iloc[i]["Channel Product Id"]
-        adminFile.at[i,"Master SKU"] = eci.iloc[i]["Uniware Sku Code"]
-        adminFile.at[i,"Inventory"] = eci.iloc[i]["Next Inventory Update"]
+        adminFile.at[i,"asin"] = eci.iloc[i]["Channel Product Id"]
+        adminFile.at[i,"master_sku"] = eci.iloc[i]["Uniware Sku Code"]
+        adminFile.at[i,"inventory"] = eci.iloc[i]["Next Inventory Update"]
 
     for i in range(len(adminFile)):
-        adminFile.at[i,"Our Cost"] = pri.loc[pri['ASIN'] == adminFile.at[i,"ASIN"]]['Cost'].values
-        adminFile.at[i,"Our Cost"] = adminFile.at[i,"Our Cost"][0] if len(adminFile.at[i,"Our Cost"]) else 0
-        sku = adminFile.at[i,"Master SKU"]
+        adminFile.at[i,"our_cost"] = pri.loc[pri['ASIN'] == adminFile.at[i,"asin"]]['Cost'].values
+        adminFile.at[i,"our_cost"] = adminFile.at[i,"our_cost"][0] if len(adminFile.at[i,"our_cost"]) else 0
+        sku = adminFile.at[i,"master_sku"]
         data = eim.loc[eim['Product Code'] == sku]
-        adminFile.at[i,"Name"] = data["Name"].values[0] if len(data["Name"].values) else None 
+        adminFile.at[i,"name"] = data["Name"].values[0] if len(data["Name"].values) else "NA" 
         if len(data["Type"].values) and data["Type"].values[0] == "BUNDLE":
-            adminFile.at[i,"SKU"] = ', '.join(data["Component Product Code"].values)
+            adminFile.at[i,"sku"] = ', '.join(data["Component Product Code"].values)
 
     adminData = adminFile.to_dict(orient='records')
 
     # Inserting data to admin database
     for data in adminData:
-        asin = data["ASIN"]
-        if admin.find_one({"ASIN": asin}):
-            admin.update_one({"ASIN": asin}, {"$set": data})
+        asin = data["asin"]
+        if admin.find_one({"asin": asin}):
+            admin.update_one({"asin": asin}, {"$set": data})
         else:
             admin.insert_one(data)     
 
@@ -75,23 +75,27 @@ def managerFilesProcessing(path,purchase, quantity):
     
     # Fetching Admin data from database 
     adminFile = pd.DataFrame(list(admin.find()))
-    
+
     managerData = []
     for k in po:
         database = {}
-        database["Purchase Order"] = k
-        database["Items"] = []
+        database["_id"] = get_uuid()
+        database["purchase_order"] = k
+        database["tracking_id"] = "NA"
+        database["return_status"] = "NA"
+        database["created"] = database["updated"] = get_time() 
+        database["items"] = []
         for data in po[k]:
-            adminData = adminFile.loc[adminFile['ASIN'] == data[0]]
-            database["Items"].append({
-                "ASIN": data[0],
-                "Unit Cost": data[1],
-                "Quantity": data[2],
-                "Name": adminData["Name"].values[0] if len(adminData["Name"]) else None,
-                "Inventory": adminData["Inventory"].values[0] if len(adminData["Inventory"]) else None,
-                "Master SKU" : adminData["Master SKU"].values[0] if len(adminData["Master SKU"]) else None,
-                "SKU": adminData["SKU"].values[0] if len(adminData["SKU"]) else None,
-                "Our Cost": adminData["Our Cost"].values[0] if len(adminData["Our Cost"]) else None
+            adminData = adminFile.loc[adminFile['asin'] == data[0]]
+            database["items"].append({
+                "asin": data[0],
+                "unit_cost": data[1],
+                "quantity": data[2],
+                "name": adminData["name"].values[0] if len(adminData["name"]) else "NA",
+                "inventory": adminData["inventory"].values[0] if len(adminData["inventory"]) else "NA",
+                "master_sku" : adminData["master_sku"].values[0] if len(adminData["master_sku"]) else "NA",
+                "sku": adminData["sku"].values[0] if len(adminData["sku"]) else "NA",
+                "our_cost": adminData["our_cost"].values[0] if len(adminData["our_cost"]) else "NA"
             })
         managerData.append(database)
     managerData

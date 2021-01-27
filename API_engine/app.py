@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # # Package # #
 from .models import *
 from .exceptions import *
-from .repositories import UsersRepository, EnterpriseRepository, FileRepository
+from .repositories import UsersRepository, EnterpriseRepository, FileRepository, PurchaseOrderRepository
 from .middlewares import request_handler
 from .settings import api_settings as settings
 
@@ -37,7 +37,7 @@ app.add_middleware(
     "/users",
     response_model=UsersRead,
     description="List all the available users",
-    tags=["users"]
+    tags=["Users"]
 )
 def _list_users():
     # TODO Filters
@@ -49,7 +49,7 @@ def _list_users():
     response_model=UserRead,
     description="Get a single user by its unique ID",
     responses=get_exception_responses(UserNotFoundException),
-    tags=["users"]
+    tags=["Users"]
 )
 def _get_user(user_id: str):
     return UsersRepository.get(user_id)
@@ -61,7 +61,7 @@ def _get_user(user_id: str):
     response_model=UserRead,
     status_code=statuscode.HTTP_201_CREATED,
     responses=get_exception_responses(UserAlreadyExistsException),
-    tags=["users"]
+    tags=["Users"]
 )
 def _create_user(create: UserCreate):
     return UsersRepository.create(create)
@@ -70,7 +70,7 @@ def _create_user(create: UserCreate):
     "/users/login",
     description="Login into system",
     responses=get_exception_responses(UserNotFoundException),
-    tags=["users"]
+    tags=["Users"]
 )
 def _login_user(email: str, password: str):
     return UsersRepository.login(email,password)
@@ -80,7 +80,7 @@ def _login_user(email: str, password: str):
     description="Update a single user by its unique ID, providing the fields to update",
     status_code=statuscode.HTTP_204_NO_CONTENT,
     responses=get_exception_responses(UserNotFoundException, UserAlreadyExistsException),
-    tags=["users"]
+    tags=["Users"]
 )
 def _update_user(user_id: str, update: UserUpdate):
     UsersRepository.update(user_id, update)
@@ -91,7 +91,7 @@ def _update_user(user_id: str, update: UserUpdate):
     description="Delete a single user by its unique ID",
     status_code=statuscode.HTTP_204_NO_CONTENT,
     responses=get_exception_responses(UserNotFoundException),
-    tags=["users"]
+    tags=["Users"]
 )
 def _delete_user(user_id: str):
     UsersRepository.delete(user_id)
@@ -99,7 +99,7 @@ def _delete_user(user_id: str):
 @app.get(
     "/enterprises",
     description="List all the available enterprises",
-    tags=["enterprises"]
+    tags=["Enterprises"]
 )
 def _list_enterprises():
     # TODO Filters
@@ -111,7 +111,7 @@ def _list_enterprises():
     response_model=EnterpriseRead,
     description="Get a single enterprise by its unique ID",
     responses=get_exception_responses(EnterpriseNotFoundException),
-    tags=["enterprises"]
+    tags=["Enterprises"]
 )
 def _get_enterprise(enterprise_id: str):
     return EnterpriseRepository.get(enterprise_id)
@@ -123,7 +123,7 @@ def _get_enterprise(enterprise_id: str):
     response_model=EnterpriseRead,
     status_code=statuscode.HTTP_201_CREATED,
     responses=get_exception_responses(EnterpriseAlreadyExistsException),
-    tags=["enterprises"]
+    tags=["Enterprises"]
 )
 def _create_enterprise(create: EnterpriseCreate):
     return EnterpriseRepository.create(create)
@@ -133,7 +133,7 @@ def _create_enterprise(create: EnterpriseCreate):
     description="Update a single enterprise by its unique ID, providing the fields to update",
     status_code=statuscode.HTTP_204_NO_CONTENT,
     responses=get_exception_responses(EnterpriseNotFoundException, EnterpriseAlreadyExistsException),
-    tags=["enterprises"]
+    tags=["Enterprises"]
 )
 def _update_enterprise(enterprise_id: str, update: EnterpriseUpdate):
     EnterpriseRepository.update(enterprise_id, update)
@@ -144,7 +144,7 @@ def _update_enterprise(enterprise_id: str, update: EnterpriseUpdate):
     description="Delete a single enterprise by its unique ID",
     status_code=statuscode.HTTP_204_NO_CONTENT,
     responses=get_exception_responses(EnterpriseNotFoundException),
-    tags=["enterprises"]
+    tags=["Enterprises"]
 )
 def _delete_enterprise(enterprise_id: str):
     EnterpriseRepository.delete(enterprise_id)
@@ -152,7 +152,7 @@ def _delete_enterprise(enterprise_id: str):
 @app.post(
     "/uploadfile/admin/",
     status_code=statuscode.HTTP_201_CREATED,
-    tags=["files"]
+    tags=["Files"]
     )
 async def upload_file_admin(export_channel: UploadFile = File(...),export_item: UploadFile = File(...),pricing: UploadFile = File(...)):
     FileRepository.adminUpload(export_channel,export_item,pricing)
@@ -173,7 +173,7 @@ async def upload_file_admin(export_channel: UploadFile = File(...),export_item: 
 @app.post(
     "/uploadfile/manager/",
     status_code=statuscode.HTTP_201_CREATED,
-    tags=["files"]
+    tags=["Files"]
     )
 async def upload_file_manager(purchaseOrder: UploadFile = File(...), quantity: UploadFile = File(...)):
     FileRepository.managerUpload(purchaseOrder, quantity)
@@ -187,6 +187,36 @@ async def upload_file_manager(purchaseOrder: UploadFile = File(...), quantity: U
             "status": True
         }
     ]
+
+@app.get(
+    "/purchase_orders",
+    description="List all the available purchase orders",
+    tags=["Purchase Order"]
+)
+def _list_purchase_order():
+    # TODO Filters
+    return PurchaseOrderRepository.list()
+
+
+@app.get(
+    "/purchase_orders/{purchase_order}",
+    response_model=PurchaseOrderRead,
+    description="Get a single purchase details by its purchase order",
+    responses=get_exception_responses(PurchaseOrderNotFoundException),
+    tags=["Purchase Order"]
+)
+def _get_enterprise(purchase_order: str):
+    return PurchaseOrderRepository.get(purchase_order)
+
+@app.patch(
+    "/purchase_orders/{purchase_order}",
+    description="Update a single enterprise by its unique ID, providing the fields to update",
+    status_code=statuscode.HTTP_204_NO_CONTENT,
+    responses=get_exception_responses(PurchaseOrderNotFoundException, PurchaseOrderAlreadyExistsException),
+    tags=["Purchase Order"]
+)
+def _update_enterprise(purchase_order: str, update: PurchaseOrderUpdate):
+    PurchaseOrderRepository.update(purchase_order, update)
 
 def run():
     """Run the API using Uvicorn"""

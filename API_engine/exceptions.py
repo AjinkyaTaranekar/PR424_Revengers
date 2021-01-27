@@ -20,7 +20,8 @@ __all__ = (
     "NotFoundException", "AlreadyExistsException",
     "UserNotFoundException", "InvalidUserPasswordException", 
     "UserAlreadyExistsException", "get_exception_responses",
-    "EnterpriseNotFoundException", "EnterpriseAlreadyExistsException"
+    "EnterpriseNotFoundException", "EnterpriseAlreadyExistsException",
+    "PurchaseOrderNotFoundException", "PurchaseOrderAlreadyExistsException"
 )
 
 
@@ -92,6 +93,14 @@ class EnterpriseNotFoundException(NotFoundException):
 class EnterpriseAlreadyExistsException(AlreadyExistsException):
     """Error raised when a enterprise already exists"""
     message = "The enterprise already exists"
+
+class PurchaseOrderAlreadyExistsException(AlreadyExistsException):
+    """Error raised when a PurchaseOrder already exists"""
+    message = "The Purchase Order already exists"
+
+class PurchaseOrderNotFoundException(NotFoundException):
+    """Error raised when a PurchaseOrder does not exist"""
+    message = "The Purchase Order does not exist"
 
 def get_exception_responses(*args: Type[BaseAPIException]) -> dict:
     """Given BaseAPIException classes, return a dict of responses used on FastAPI endpoint definition, with the format:
