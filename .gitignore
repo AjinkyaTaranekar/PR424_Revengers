@@ -2,3 +2,4 @@
 .vscode/
 *pycache*/
 .env
+nohup.out

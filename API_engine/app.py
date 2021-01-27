@@ -6,6 +6,7 @@ FastAPI app definition, initialization and definition of routes
 import uvicorn
 from fastapi import FastAPI, File, UploadFile
 from fastapi import status as statuscode
+from fastapi.middleware.cors import CORSMiddleware
 
 # # Package # #
 from .models import *
@@ -21,8 +22,16 @@ __all__ = ("app", "run")
 app = FastAPI(
     title=settings.title
 )
+
 app.middleware("http")(request_handler)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get(
     "/users",
