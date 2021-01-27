@@ -1,0 +1,270 @@
+INFO:     Started server process [2110]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     182.77.71.242:57513 - "GET /docs HTTP/1.1" 200 OK
+INFO:     182.77.71.242:57513 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     182.77.71.242:57513 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     182.77.71.242:57513 - "GET /docs HTTP/1.1" 200 OK
+INFO:     182.77.71.242:57513 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50820 - "GET /docs HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50820 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50820 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:50820 - "GET /users HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50846 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     209.17.96.210:49710 - "GET / HTTP/1.1" 404 Not Found
+Traceback (most recent call last):
+  File "__main__.py", line 1, in <module>
+    from API_engine import run
+  File "/home/robotbanao/RobotBanao-BackEnd/API_engine/__init__.py", line 1, in <module>
+    from .app import app, run
+  File "/home/robotbanao/RobotBanao-BackEnd/API_engine/app.py", line 13, in <module>
+    from .repositories import UsersRepository
+  File "/home/robotbanao/RobotBanao-BackEnd/API_engine/repositories.py", line 6, in <module>
+    import bcrypt
+ModuleNotFoundError: No module named 'bcrypt'
+INFO:     Started server process [3851]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     182.77.71.242:58867 - "GET /docs HTTP/1.1" 200 OK
+INFO:     182.77.71.242:58867 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     182.77.71.242:58867 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     182.77.71.242:58867 - "GET /users HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/uvicorn/protocols/http/h11_impl.py", line 394, in run_asgi
+    result = await app(self.scope, self.receive, self.send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/uvicorn/middleware/proxy_headers.py", line 45, in __call__
+    return await self.app(scope, receive, send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/fastapi/applications.py", line 201, in __call__
+    await super().__call__(scope, receive, send)  # pragma: no cover
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/applications.py", line 111, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/middleware/errors.py", line 181, in __call__
+    raise exc from None
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/middleware/errors.py", line 159, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/middleware/base.py", line 25, in __call__
+    response = await self.dispatch_func(request, self.call_next)
+  File "/home/robotbanao/RobotBanao-BackEnd/API_engine/middlewares.py", line 26, in request_handler
+    raise ex
+  File "/home/robotbanao/RobotBanao-BackEnd/API_engine/middlewares.py", line 19, in request_handler
+    return await call_next(request)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/middleware/base.py", line 45, in call_next
+    task.result()
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/middleware/base.py", line 38, in coro
+    await self.app(scope, receive, send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/exceptions.py", line 82, in __call__
+    raise exc from None
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/exceptions.py", line 71, in __call__
+    await self.app(scope, receive, sender)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/routing.py", line 566, in __call__
+    await route.handle(scope, receive, send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/routing.py", line 227, in handle
+    await self.app(scope, receive, send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/routing.py", line 41, in app
+    response = await func(request)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/fastapi/routing.py", line 202, in app
+    dependant=dependant, values=values, is_coroutine=is_coroutine
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/fastapi/routing.py", line 150, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await loop.run_in_executor(None, func, *args)
+  File "/usr/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/home/robotbanao/RobotBanao-BackEnd/API_engine/app.py", line 34, in _list_users
+    return UsersRepository.list()
+  File "/home/robotbanao/RobotBanao-BackEnd/API_engine/repositories.py", line 43, in list
+    return [UserRead(**document) for document in cursor]
+  File "/home/robotbanao/RobotBanao-BackEnd/API_engine/repositories.py", line 43, in <listcomp>
+    return [UserRead(**document) for document in cursor]
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/pymongo/cursor.py", line 1207, in next
+    if len(self.__data) or self._refresh():
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/pymongo/cursor.py", line 1100, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/pymongo/mongo_client.py", line 1816, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/pymongo/mongo_client.py", line 1766, in __start_session
+    server_session = self._get_server_session()
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/pymongo/mongo_client.py", line 1802, in _get_server_session
+    return self._topology.get_server_session()
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/pymongo/topology.py", line 488, in get_server_session
+    None)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/pymongo/topology.py", line 217, in _select_servers_loop
+    (self._error_message(selector), timeout, self.description))
+pymongo.errors.ServerSelectionTimeoutError: 127.0.0.1:27017: [Errno 111] Connection refused, Timeout: 30s, Topology Description: <TopologyDescription id: 600fadb770ccf0cb527db79f, topology_type: Single, servers: [<ServerDescription ('127.0.0.1', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('127.0.0.1:27017: [Errno 111] Connection refused',)>]>
+INFO:     Started server process [3982]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     182.77.71.242:58953 - "GET /users HTTP/1.1" 200 OK
+INFO:     49.36.35.145:52253 - "GET /docs HTTP/1.1" 200 OK
+INFO:     49.36.35.145:52253 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     182.77.71.242:58953 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:52256 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:52257 - "POST /users/login?email=manager%40robotbanao.com&password=manager%40robo HTTP/1.1" 404 Not Found
+INFO:     182.77.71.242:58980 - "POST /users HTTP/1.1" 201 Created
+INFO:     182.77.71.242:58982 - "POST /users HTTP/1.1" 201 Created
+INFO:     182.77.71.242:58984 - "POST /users HTTP/1.1" 201 Created
+INFO:     49.36.35.145:52284 - "GET /docs HTTP/1.1" 200 OK
+INFO:     49.36.35.145:52284 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:52284 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:52285 - "POST /users/login?email=manager%40robotbanao.com&password=manager%40robo HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:52286 - "POST /users/login?email=manager%40robotbanao.com&password=manager%40robo%2326 HTTP/1.1" 200 OK
+INFO:     49.36.35.145:52287 - "POST /users/login?email=manager%40robotbanao.com&password=manager%40robo HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:52288 - "POST /users/login?email=manager%40robotbanao.com&password=manager%40robo%2326 HTTP/1.1" 200 OK
+INFO:     49.36.35.145:52289 - "POST /users/login?email=manager%40robotbanao.com&password=manager%40robo HTTP/1.1" 404 Not Found
+INFO:     182.77.71.242:58993 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     182.77.71.242:59001 - "PATCH /users/cdfab1a4-6de8-4a10-85eb-0ab42d337b9e HTTP/1.1" 422 Unprocessable Entity
+INFO:     182.77.71.242:59005 - "PATCH /users/cdfab1a4-6de8-4a10-85eb-0ab42d337b9e HTTP/1.1" 204 No Content
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/uvicorn/protocols/http/h11_impl.py", line 394, in run_asgi
+    result = await app(self.scope, self.receive, self.send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/uvicorn/middleware/proxy_headers.py", line 45, in __call__
+    return await self.app(scope, receive, send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/fastapi/applications.py", line 201, in __call__
+    await super().__call__(scope, receive, send)  # pragma: no cover
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/applications.py", line 111, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/middleware/errors.py", line 181, in __call__
+    raise exc from None
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/middleware/errors.py", line 159, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/middleware/base.py", line 26, in __call__
+    await response(scope, receive, send)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/responses.py", line 230, in __call__
+    (self.listen_for_disconnect, {"receive": receive}),
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/concurrency.py", line 18, in run_until_first_complete
+    [task.result() for task in done]
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/concurrency.py", line 18, in <listcomp>
+    [task.result() for task in done]
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/responses.py", line 223, in stream_response
+    await send({"type": "http.response.body", "body": chunk, "more_body": True})
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/starlette/middleware/errors.py", line 156, in _send
+    await send(message)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/uvicorn/protocols/http/h11_impl.py", line 487, in send
+    output = self.conn.send(event)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/h11/_connection.py", line 468, in send
+    data_list = self.send_with_data_passthrough(event)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/h11/_connection.py", line 501, in send_with_data_passthrough
+    writer(event, data_list.append)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/h11/_writers.py", line 58, in __call__
+    self.send_data(event.data, write)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/h11/_writers.py", line 78, in send_data
+    raise LocalProtocolError("Too much data for declared Content-Length")
+h11._util.LocalProtocolError: Too much data for declared Content-Length
+INFO:     Started server process [5013]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     182.77.71.242:59657 - "GET /docs HTTP/1.1" 200 OK
+INFO:     182.77.71.242:59657 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     182.77.71.242:59670 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     182.77.71.242:59778 - "GET /redoc HTTP/1.1" 200 OK
+INFO:     182.77.71.242:59778 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50733 - "GET /redoc HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50733 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50788 - "GET /docs HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50788 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50788 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:50788 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50800 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:50815 - "GET /redoc HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50815 - "GET /openapi.json HTTP/1.1" 200 OK
+Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+Traceback (most recent call last):
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/fastapi/dependencies/utils.py", line 93, in check_file_field
+    from multipart import __version__  # type: ignore
+ModuleNotFoundError: No module named 'multipart'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "__main__.py", line 1, in <module>
+    from API_engine import run
+  File "/home/robotbanao/RobotBanao-BackEnd/API_engine/__init__.py", line 1, in <module>
+    from .app import app, run
+  File "/home/robotbanao/RobotBanao-BackEnd/API_engine/app.py", line 148, in <module>
+    async def upload_file_admin(file: UploadFile = File(...)):
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/fastapi/routing.py", line 574, in decorator
+    callbacks=callbacks,
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/fastapi/routing.py", line 520, in add_api_route
+    callbacks=current_callbacks,
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/fastapi/routing.py", line 386, in __init__
+    self.body_field = get_body_field(dependant=self.dependant, name=self.unique_id)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/fastapi/dependencies/utils.py", line 782, in get_body_field
+    check_file_field(final_field)
+  File "/home/robotbanao/.local/lib/python3.6/site-packages/fastapi/dependencies/utils.py", line 106, in check_file_field
+    raise RuntimeError(multipart_not_installed_error)
+RuntimeError: Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+INFO:     Started server process [9736]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     182.77.71.242:61657 - "GET /docs HTTP/1.1" 200 OK
+INFO:     182.77.71.242:61657 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     209.17.97.106:40255 - "GET / HTTP/1.1" 404 Not Found
+INFO:     209.17.96.242:57515 - "GET / HTTP/1.0" 404 Not Found
+INFO:     49.36.35.145:50335 - "GET /docs HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50335 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50343 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:50347 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:50376 - "POST /users/login?email=manager%40robotbanao.com&password=manager%40robo%2326 HTTP/1.1" 200 OK
+INFO:     49.36.35.145:50878 - "OPTIONS //user/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:50938 - "OPTIONS //user/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:50967 - "OPTIONS /users/login?email=test&password=test HTTP/1.1" 405 Method Not Allowed
+INFO:     49.36.35.145:50992 - "GET /users/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:50992 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:51020 - "POST /users/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:51063 - "GET /users/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:51387 - "GET /docs HTTP/1.1" 200 OK
+INFO:     49.36.35.145:51387 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:51387 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:51395 - "GET /docs HTTP/1.1" 200 OK
+INFO:     49.36.35.145:51395 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:51401 - "GET /redoc HTTP/1.1" 200 OK
+INFO:     49.36.35.145:51401 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:51483 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:51483 - "GET /users HTTP/1.1" 200 OK
+INFO:     49.36.35.145:51705 - "POST /users/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:51727 - "POST /users/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     Started server process [28736]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     49.36.35.145:52771 - "GET /docs HTTP/1.1" 200 OK
+INFO:     49.36.35.145:52771 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:52771 - "GET /%5Bobject%20Module%5D HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:52783 - "POST /users/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:52802 - "GET /redoc HTTP/1.1" 200 OK
+INFO:     49.36.35.145:52802 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:52900 - "POST /users/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:53097 - "POST /users/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     Started server process [28914]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 5000): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Started server process [28924]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 5000): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     49.36.35.145:53286 - "GET /redoc HTTP/1.1" 200 OK
+INFO:     49.36.35.145:53286 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     49.36.35.145:53294 - "POST /users/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:53301 - "POST /users/login?email=test&password=test HTTP/1.1" 404 Not Found
+INFO:     49.36.35.145:53316 - "GET /redoc HTTP/1.1" 200 OK
+INFO:     49.36.35.145:53316 - "GET /openapi.json HTTP/1.1" 200 OK
