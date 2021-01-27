@@ -28,6 +28,8 @@ class MongoSettings(BaseSettings):
     database: str = "robot_banao"
     users: str = "users"
     enterprises: str = "enterprises"
+    admin: str = "admin"
+    manager: str = "manager"
 
     class Config(BaseSettings.Config):
         env_prefix = "MONGO_"
