@@ -145,13 +145,22 @@ def _delete_enterprise(enterprise_id: str):
     status_code=statuscode.HTTP_201_CREATED,
     tags=["files"]
     )
-async def upload_file_admin(file: UploadFile = File(...)):
-    FileRepository.adminUpload(file)
-    return {
-        "filename": file.filename,
-        "status": True
+async def upload_file_admin(export_channel: UploadFile = File(...),export_item: UploadFile = File(...),pricing: UploadFile = File(...)):
+    FileRepository.adminUpload(export_channel,export_item,pricing)
+    return [
+        {
+            "export_channel" : export_channel.filename,
+            "status": True
+        },
+        {
+            "export_item" : export_item.filename,
+            "status": True
+        },
+        {
+            "pricing" : pricing.filename,
+            "status": True
         }
-
+    ]
 @app.post(
     "/uploadfile/manager/",
     status_code=statuscode.HTTP_201_CREATED,

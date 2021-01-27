@@ -9,7 +9,7 @@ import bcrypt
 from .models import *
 from .exceptions import *
 from .database import users, enterprises
-from .utils import get_time, get_uuid
+from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing
 
 # # Native # #
 from datetime import datetime
@@ -129,23 +129,30 @@ class EnterpriseRepository:
 
 class FileRepository:
     @staticmethod
-    def adminUpload(file):
+    def adminUpload(export_channel,export_item,pricing):
         """Files uploaded by admin"""
-        with open("Uploads/admin/"+file.filename, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
+        path = "Uploads/admin/"
+        with open(path + export_channel.filename, "wb") as buffer:
+            shutil.copyfileobj(export_channel.file, buffer)
+        with open(path + export_item.filename, "wb") as buffer:
+            shutil.copyfileobj(export_item.file, buffer)
+        with open(path + pricing.filename, "wb") as buffer:
+            shutil.copyfileobj(pricing.file, buffer)
+        adminFilesProcessing(path,export_channel.filename,export_item.filename,pricing.filename)
         
     @staticmethod
     def managerUpload(purchase, quantity):
         """Files uploaded by manager"""
         today = datetime.now()
-        folder_path = "Uploads/manager/" + today.strftime('%d-%m-%Y %H-%M-%S') 
+        folder_path = "Uploads/manager/" + today.strftime('%d-%m-%Y %H-%M-%S') + "/"
         
         if not os.path.isdir(folder_path):
             os.mkdir(folder_path)
         
-        with open(folder_path+"/"+purchase.filename, "wb") as buffer:
+        with open(folder_path + purchase.filename, "wb") as buffer:
             shutil.copyfileobj(purchase.file, buffer)
         
-        with open(folder_path+"/"+quantity.filename, "wb") as buffer:
+        with open(folder_path + quantity.filename, "wb") as buffer:
             shutil.copyfileobj(quantity.file, buffer)
+        managerFilesProcessing(folder_path,purchase.filename, quantity.filename)
         
