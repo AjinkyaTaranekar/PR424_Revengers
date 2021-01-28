@@ -22,7 +22,7 @@ Endpoints define the whole CRUD operations that can be performed on User entitie
     - `user_update.py`: model used as PATCH request body. Includes all the fields that can be updated, set as optional.
     - `user_create.py`: model used as POST request body. Includes all the fields from the Update model, but all those fields that are required on Create, must be re-declared (in type and Field value).
     - `user_read.py`: model used as GET and POST response body. Includes all the fields from the Create model, plus the user_id (which comes from the _id field in Mongo document) and the age (calculated from the date of birth, if any).
-    - `user_address.py`: part of the User model, address attribute.
+    - `address.py`: part of the User model, address attribute.
     - `common.py`: definition of the common BaseModel, from which all the model classes inherit, directly or indirectly.
     - `fields.py`: definition of Fields, which are the values of the models attributes. Their main purpose is to complete the OpenAPI documentation by providing a description and examples. Fields are declared outside the classes because of the re-declaration required between Update and Create models.
     - `errors.py`: error models. They are referenced on Exception classes defined in `exceptions.py`.
