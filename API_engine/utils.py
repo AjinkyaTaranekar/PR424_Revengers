@@ -28,7 +28,7 @@ def get_uuid() -> str:
 def adminFilesProcessing(path,export_channel,export_item,pricing):
     """Admin Files are Processed here"""
     # Pricing file
-    pri = pd.read_excel(path+pricing)
+    pri = pd.read_excel(path+pricing, engine='openpyxl')
     pri.columns = pri.iloc[3]
     pri = pri.drop(pri.index[0])
     pri = pri.drop(pri.index[0])
@@ -70,7 +70,7 @@ def adminFilesProcessing(path,export_channel,export_item,pricing):
 def managerFilesProcessing(path,purchase, quantity):
     """Manager Files are Processed here"""
     # Getting Purchase Order
-    poi = pd.read_excel(path + purchase)
+    poi = pd.read_excel(path + purchase, engine='openpyxl',)
     po = poi.groupby(["PO"])[['ASIN', 'Unit Cost', 'Quantity Requested']].apply(lambda g: list(map(tuple, g.values.tolist()))).to_dict()
     
     # Fetching Admin data from database 
