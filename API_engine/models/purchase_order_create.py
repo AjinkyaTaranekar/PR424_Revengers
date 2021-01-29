@@ -15,4 +15,5 @@ class PurchaseOrderCreate(PurchaseOrderUpdate):
     purchase_order: str = PurchaseOrderFields.purchase_order
     tracking_id: str = PurchaseOrderFields.tracking_id
     return_status: str = PurchaseOrderFields.return_status
+    order_status: str = PurchaseOrderFields.order_status
     items: Items = PurchaseOrderFields.items

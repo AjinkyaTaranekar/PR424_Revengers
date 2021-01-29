@@ -17,3 +17,4 @@ class PurchaseOrderUpdate(BaseModel):
     """Body of PurchaseOrder PATCH requests"""
     tracking_id: Optional[str] = PurchaseOrderFields.tracking_id
     return_status: Optional[str] = PurchaseOrderFields.return_status
+    order_status: Optional[str] = PurchaseOrderFields.order_status

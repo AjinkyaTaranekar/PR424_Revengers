@@ -172,10 +172,8 @@ class ItemsFields:
         example="ES-2434",
         **_string
     )
-    sku = Field(
-        description="Sub SKU present in Item, if Bundled",
-        example="Indore",
-        **_string
+    bundle_item = Field(
+        description="Sub item present in Items, if Bundled",
     )
     unit_cost = Field(
         description="Unit Cost of the product on Amazon",
@@ -190,6 +188,23 @@ class ItemsFields:
     quantity = Field(
         description="Quantity of the product requested",
         example="45",
+        **_string
+    )
+
+class BundleItemsFields:
+    sku = Field(
+        description="SKU of the Item",
+        example="RB-1324",
+        **_string
+    )
+    name = Field(
+        description="Name of the item",
+        example="4 x Hub",
+        **_string
+    )
+    quantity = Field(
+        description="Quantity of Item",
+        example="42",
         **_string
     )
 
@@ -214,6 +229,11 @@ class PurchaseOrderFields:
     return_status = Field(
         description="Return Status of the purchase",
         example="True",
+        **_string
+    )
+    order_status = Field(
+        description="Order Status of the purchase",
+        example="Incoming",
         **_string
     )
     items = Field(

@@ -42,22 +42,31 @@ def adminFilesProcessing(path,export_channel,export_item,pricing):
     # Export Item Master
     eim = pd.read_csv(path+export_item, engine ='python')
 
-    adminFile = pd.DataFrame(columns= ["asin", "master_sku" "sku", "name", "our_cost", "inventory"])
-    for i in range(len(eci)):
-        adminFile.at[i,"asin"] = eci.iloc[i]["Channel Product Id"]
-        adminFile.at[i,"master_sku"] = eci.iloc[i]["Uniware Sku Code"]
-        adminFile.at[i,"inventory"] = eci.iloc[i]["Next Inventory Update"]
-
-    for i in range(len(adminFile)):
-        adminFile.at[i,"our_cost"] = pri.loc[pri['ASIN'] == adminFile.at[i,"asin"]]['Cost'].values
-        adminFile.at[i,"our_cost"] = adminFile.at[i,"our_cost"][0] if len(adminFile.at[i,"our_cost"]) else 0
-        sku = adminFile.at[i,"master_sku"]
+    count = 0
+    adminData = []
+    for i in range(len(eci)): 
+        adminFile = {}
+        adminFile["asin"] = eci.iloc[i]["Channel Product Id"]
+        adminFile["master_sku"] = eci.iloc[i]["Uniware Sku Code"]
+        adminFile["inventory"] = eci.iloc[i]["Next Inventory Update"]
+        adminFile["our_cost"] = pri.loc[pri['ASIN'] == adminFile["asin"]]['Cost'].values
+        adminFile["our_cost"] = adminFile["our_cost"][0] if len(adminFile["our_cost"]) else 0
+        sku = adminFile["master_sku"]
         data = eim.loc[eim['Product Code'] == sku]
-        adminFile.at[i,"name"] = data["Name"].values[0] if len(data["Name"].values) else "NA" 
+        adminFile["bundle_items"] = []
+        adminFile["name"] = data["Name"].values[0] if len(data["Name"].values) else "NA" 
         if len(data["Type"].values) and data["Type"].values[0] == "BUNDLE":
-            adminFile.at[i,"sku"] = ', '.join(data["Component Product Code"].values)
-
-    adminData = adminFile.to_dict(orient='records')
+            bundle = []
+            for i in range(len(data["Component Product Code"].values)):
+                name = eim.loc[eim['Product Code'] == data["Component Product Code"].values[i]]['Name'].values[0]
+                bundle.append({
+                    "sku": data["Component Product Code"].values[i],
+                    "name": name,
+                    "quantity": data["Component Quantity"].values[i],
+                })
+            count+=1
+            adminFile["bundle_items"] = bundle
+        adminData.append(adminFile)
 
     # Inserting data to admin database
     for data in adminData:
@@ -83,6 +92,7 @@ def managerFilesProcessing(path,purchase, quantity):
         database["purchase_order"] = k
         database["tracking_id"] = "NA"
         database["return_status"] = "NA"
+        database["order_status"] = "Incoming"
         database["created"] = database["updated"] = get_time() 
         database["items"] = []
         for data in po[k]:
@@ -94,7 +104,7 @@ def managerFilesProcessing(path,purchase, quantity):
                 "name": adminData["name"].values[0] if len(adminData["name"]) else "NA",
                 "inventory": adminData["inventory"].values[0] if len(adminData["inventory"]) else "NA",
                 "master_sku" : adminData["master_sku"].values[0] if len(adminData["master_sku"]) else "NA",
-                "sku": adminData["sku"].values[0] if len(adminData["sku"]) else "NA",
+                "bundle_item": adminData["bundle_items"].values[0] if len(adminData["bundle_items"]) else [],
                 "our_cost": adminData["our_cost"].values[0] if len(adminData["our_cost"]) else "NA"
             })
         managerData.append(database)
