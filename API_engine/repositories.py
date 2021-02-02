@@ -9,14 +9,14 @@ import bcrypt
 from .models import *
 from .exceptions import *
 from .database import users, enterprises, manager
-from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing
+from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing, invoiceGenerator
 
 # # Native # #
 from datetime import datetime
 import shutil
 import os
 
-__all__ = ("UsersRepository","EnterpriseRepository","FileRepository", "PurchaseOrderRepository")
+__all__ = ("UsersRepository","EnterpriseRepository","FileRepository", "PurchaseOrderRepository", "InvoiceRepository")
 
 
 class UsersRepository:
@@ -181,3 +181,24 @@ class PurchaseOrderRepository:
         result = manager.update_one({"purchase_order": purchaseOrder}, {"$set": document})
         if not result.modified_count:
             raise PurchaseOrderNotFoundException(identifier=purchaseOrder)
+
+class InvoiceRepository:
+    @staticmethod
+    def getInvoice(purchase_order: str, billed_from_id: str, billed_to_id: str):
+        """Retrieve a single Invoice by its purchaseOrder and enterpriseNumber"""
+        managerData = manager.find_one({"purchase_order": purchase_order})
+        if not managerData:
+            raise PurchaseOrderNotFoundException(purchase_order)
+        
+        enterpriseData = enterprises.find_one({"_id": billed_from_id})
+        if not enterpriseData:
+            raise EnterpriseNotFoundException(billed_from_id)
+        
+        enterpriseToData = enterprises.find_one({"_id": billed_to_id})
+        if not enterpriseToData:
+            raise EnterpriseNotFoundException(billed_to_id)
+
+        customer_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"customer")
+        seller_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"seller")
+        transporter_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"transporter")
+        return [customer_path, seller_path, transporter_path]

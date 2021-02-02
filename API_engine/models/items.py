@@ -20,6 +20,8 @@ class Item(BaseModel):
     """The item information of a purchase order"""
     asin: str = ItemsFields.asin
     name: str = ItemsFields.name
+    hsn: str = ItemsFields.hsn
+    shipped: bool = ItemsFields.shipped
     inventory: str = ItemsFields.inventory
     master_sku: str = ItemsFields.master_sku
     bundle_item: Optional[BundleItems] = ItemsFields.bundle_item 

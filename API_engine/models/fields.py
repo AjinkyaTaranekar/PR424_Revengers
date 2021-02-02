@@ -101,6 +101,30 @@ class EnterpriseFields:
         example="XXXXXXXXXXXXXXXXX",
         **_string
     )
+    billed = Field(
+        description="Billing To/From Enterprise",
+        example=True
+    )
+    bank_name = Field(
+        description="Bank Name for this enterprise",
+        example="HDFC",
+        **_string
+    )
+    branch_name = Field(
+        description="Bank Branch Name for this enterprise",
+        example="Dewas Naka",
+        **_string
+    )
+    account_number = Field(
+        description="Account Number for this enterprise",
+        example="210400222222412",
+        **_string
+    )
+    ifsc = Field(
+        description="Bank IFSC for this enterprise",
+        example="HDFC214923",
+        **_string
+    )
     address = Field(
         description="Address object where this enterprise live"
     )
@@ -161,6 +185,15 @@ class ItemsFields:
         description="Name of the item",
         example="4 x Hub",
         **_string
+    )
+    hsn = Field(
+        description="HSN of the item",
+        example="8059",
+        **_string
+    )
+    shipped = Field(
+        description="Status of the item",
+        example=False
     )
     inventory = Field(
         description="Inventory of Item",
@@ -224,6 +257,11 @@ class PurchaseOrderFields:
     tracking_id = Field(
         description="Tracking ID of the purchase",
         example="XXXXXXXXX",
+        **_string
+    )
+    ship_to_location = Field(
+        description="Shipping Location of the purchase",
+        example="Indore",
         **_string
     )
     return_status = Field(

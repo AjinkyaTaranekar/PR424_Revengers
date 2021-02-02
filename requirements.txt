@@ -6,3 +6,4 @@ python-dotenv
 bcrypt
 pandas 
 openpyxl
+docx-mailmerge

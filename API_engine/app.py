@@ -7,11 +7,12 @@ import uvicorn
 from fastapi import FastAPI, File, UploadFile
 from fastapi import status as statuscode
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 # # Package # #
 from .models import *
 from .exceptions import *
-from .repositories import UsersRepository, EnterpriseRepository, FileRepository, PurchaseOrderRepository
+from .repositories import UsersRepository, EnterpriseRepository, FileRepository, PurchaseOrderRepository, InvoiceRepository
 from .middlewares import request_handler
 from .settings import api_settings as settings
 
@@ -205,7 +206,7 @@ def _list_purchase_order():
     responses=get_exception_responses(PurchaseOrderNotFoundException),
     tags=["Purchase Order"]
 )
-def _get_enterprise(purchase_order: str):
+def _get_purchase_order(purchase_order: str):
     return PurchaseOrderRepository.get(purchase_order)
 
 @app.patch(
@@ -215,8 +216,19 @@ def _get_enterprise(purchase_order: str):
     responses=get_exception_responses(PurchaseOrderNotFoundException, PurchaseOrderAlreadyExistsException),
     tags=["Purchase Order"]
 )
-def _update_enterprise(purchase_order: str, update: PurchaseOrderUpdate):
+def _update_purchase_order(purchase_order: str, update: PurchaseOrderUpdate):
     PurchaseOrderRepository.update(purchase_order, update)
+
+@app.post(
+    "/invoice",
+    description="Create an Invoice",
+    status_code=statuscode.HTTP_201_CREATED,
+    responses=get_exception_responses(PurchaseOrderNotFoundException,EnterpriseNotFoundException),
+    tags=["Invoice"]
+)
+def _get_invoice(billed_from_id: str, billed_to_id: str, purchase_order: str):
+    filePaths = InvoiceRepository.getInvoice(purchase_order,billed_from_id,billed_to_id)
+    return [FileResponse(filePath) for filePath in filePaths]
 
 def run():
     """Run the API using Uvicorn"""

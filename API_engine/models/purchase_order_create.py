@@ -17,3 +17,4 @@ class PurchaseOrderCreate(PurchaseOrderUpdate):
     return_status: str = PurchaseOrderFields.return_status
     order_status: str = PurchaseOrderFields.order_status
     items: Items = PurchaseOrderFields.items
+    ship_to_location: str = PurchaseOrderFields.ship_to_location
