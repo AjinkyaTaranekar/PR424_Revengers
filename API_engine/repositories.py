@@ -9,7 +9,7 @@ import bcrypt
 from .models import *
 from .exceptions import *
 from .database import users, enterprises, manager
-from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing, invoiceGenerator
+from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing, invoiceGenerator, summaryGenerator
 
 # # Native # #
 from datetime import datetime
@@ -205,3 +205,11 @@ class InvoiceRepository:
         seller_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"seller")
         transporter_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"transporter")
         return [customer_path, seller_path, transporter_path]
+
+class SummaryRepository:
+    @staticmethod
+    def getSummary(SummaryData: Summary):
+        """Retrieve a summary"""
+        summary = SummaryData.dict()
+        summary_path = summaryGenerator(summary)
+        return summary_path

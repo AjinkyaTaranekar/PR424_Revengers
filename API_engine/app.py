@@ -15,7 +15,7 @@ from fastapi.responses import FileResponse
 # # Package # #
 from .models import *
 from .exceptions import *
-from .repositories import UsersRepository, EnterpriseRepository, FileRepository, PurchaseOrderRepository, InvoiceRepository
+from .repositories import UsersRepository, EnterpriseRepository, FileRepository, PurchaseOrderRepository, InvoiceRepository, SummaryRepository
 from .middlewares import request_handler
 from .settings import api_settings as settings
 
@@ -232,6 +232,16 @@ def _update_purchase_order(purchase_order: str, update: PurchaseOrderUpdate):
 def _get_invoice(billed_from_id: str, billed_to_id: str, purchase_order: str):
     filePaths = InvoiceRepository.getInvoice(purchase_order,billed_from_id,billed_to_id)
     return [FileResponse(filePath) for filePath in filePaths]
+
+@app.post(
+    "/summary",
+    description="Create a Summary",
+    status_code=statuscode.HTTP_201_CREATED,
+    tags=["Summary"]
+)
+def _get_summary(SummaryData: Summary):
+    filePath = SummaryRepository.getSummary(SummaryData)
+    return FileResponse(filePath) 
 
 def run():
     """Run the API using Uvicorn"""

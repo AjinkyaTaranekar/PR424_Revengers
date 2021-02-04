@@ -19,7 +19,7 @@ from mailmerge import MailMerge
 from num2words import num2words
 from datetime import datetime
 
-__all__ = ("get_time", "get_uuid", "adminFilesProcessing", "managerFilesProcessing", "invoiceGenerator")
+__all__ = ("get_time", "get_uuid", "adminFilesProcessing", "managerFilesProcessing", "invoiceGenerator", "summaryGenerator")
 
 
 def get_time(seconds_precision=True) -> Union[int, float]:
@@ -204,14 +204,34 @@ def invoiceGenerator(managerData, enterpriseData, enterpriseToData, billedTo):
     return file_path
 
 def summaryGenerator(SummaryData):
-    template = "API_engine/template/invoice_template.docx"
+    template = "API_engine/template/summary_template.docx"
     document = MailMerge(template)
+    document.merge(
+        PONumber = SummaryData["purchase_order"],
+        Date = str(datetime.now().date()),
+        Destination = str(SummaryData["destination"])
+    )
+    items = []
+    for idx, item in enumerate(SummaryData["items"]):
+        items.append({
+            "ASIN": str(item["asin"]),
+            "ItemDescription": str(item["name"]),
+            "Quantity": str(item["qty"]),
+            "SKU": str(item["sku"]),
+        })
 
-    filename = ""
-    folder_path = "Uploads/invoice/" + filename
+    document.merge_rows('ASIN', items)
+
+    totalQty = sum(float(item["Quantity"]) for item in items)
+    
+    document.merge(
+        TotalQty = str(totalQty),
+    )
+    
+    filename = SummaryData["purchase_order"] + "_Summary"
+    folder_path = "Uploads/summary/" + SummaryData["purchase_order"].split("_")[0]
     if not os.path.isdir(folder_path):
         os.mkdir(folder_path)
-    boxNo = 0
-    file_path = folder_path + "/" + filename + "_" + boxNo +".docx"
+    file_path = folder_path + "/" + filename +".docx"
     document.write(file_path)
     return file_path
