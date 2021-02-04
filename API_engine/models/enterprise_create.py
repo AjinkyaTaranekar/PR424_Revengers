@@ -21,7 +21,7 @@ class EnterpriseCreate(EnterpriseUpdate):
     website: str = EnterpriseFields.website
     GSTIN: str = EnterpriseFields.GSTIN
     address: Address = EnterpriseFields.address
-    billed: bool = EnterpriseFields.billed
+    billing: bool = EnterpriseFields.billing
     bank_name: Optional[str] = EnterpriseFields.bank_name
     account_number: Optional[str] = EnterpriseFields.account_number
     ifsc: Optional[str] = EnterpriseFields.ifsc

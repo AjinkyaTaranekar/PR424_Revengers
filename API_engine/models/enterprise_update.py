@@ -24,7 +24,7 @@ class EnterpriseUpdate(BaseModel):
     website: Optional[str] = EnterpriseFields.website
     GSTIN: Optional[str] = EnterpriseFields.GSTIN
     address: Optional[Address] = EnterpriseFields.address_update
-    billed: bool = EnterpriseFields.billed
+    billing: bool = EnterpriseFields.billing
     bank_name: Optional[str] = EnterpriseFields.bank_name
     account_number: Optional[str] = EnterpriseFields.account_number
     ifsc: Optional[str] = EnterpriseFields.ifsc

@@ -84,7 +84,7 @@ def adminFilesProcessing(path,export_channel,export_item,pricing):
         else:
             admin.insert_one(data)     
 
-def managerFilesProcessing(path,purchase, quantity):
+def managerFilesProcessing(path, purchase, quantity = None):
     """Manager Files are Processed here"""
     # Getting Purchase Order
     poi = pd.read_excel(path + purchase, engine='openpyxl',)

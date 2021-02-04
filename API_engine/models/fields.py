@@ -101,7 +101,7 @@ class EnterpriseFields:
         example="XXXXXXXXXXXXXXXXX",
         **_string
     )
-    billed = Field(
+    billing = Field(
         description="Billing To/From Enterprise",
         example=True
     )

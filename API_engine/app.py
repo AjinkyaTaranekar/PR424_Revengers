@@ -2,6 +2,9 @@
 FastAPI app definition, initialization and definition of routes
 """
 
+# # Native # #
+from typing import Optional
+
 # # Installed # #
 import uvicorn
 from fastapi import FastAPI, File, UploadFile
@@ -176,7 +179,7 @@ async def upload_file_admin(export_channel: UploadFile = File(...),export_item: 
     status_code=statuscode.HTTP_201_CREATED,
     tags=["Files"]
     )
-async def upload_file_manager(purchaseOrder: UploadFile = File(...), quantity: UploadFile = File(...)):
+async def upload_file_manager(purchaseOrder: UploadFile = File(...), quantity: Optional[UploadFile] = File(None)):
     FileRepository.managerUpload(purchaseOrder, quantity)
     return [
         {
@@ -184,8 +187,8 @@ async def upload_file_manager(purchaseOrder: UploadFile = File(...), quantity: U
             "status": True
         },
         {
-            "quantity" : quantity.filename,
-            "status": True
+            "quantity" : quantity.filename if quantity else "NA",
+            "status": True if quantity else False
         }
     ]
 

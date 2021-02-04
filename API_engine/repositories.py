@@ -152,9 +152,12 @@ class FileRepository:
         with open(folder_path + purchase.filename, "wb") as buffer:
             shutil.copyfileobj(purchase.file, buffer)
         
-        with open(folder_path + quantity.filename, "wb") as buffer:
-            shutil.copyfileobj(quantity.file, buffer)
-        managerFilesProcessing(folder_path,purchase.filename, quantity.filename)
+        if quantity:
+            with open(folder_path + quantity.filename, "wb") as buffer:
+                shutil.copyfileobj(quantity.file, buffer)
+            managerFilesProcessing(folder_path,purchase.filename, quantity.filename)
+        else:
+            managerFilesProcessing(folder_path,purchase.filename)
         
 
 class PurchaseOrderRepository:
