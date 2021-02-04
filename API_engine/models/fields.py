@@ -192,7 +192,11 @@ class ItemsFields:
         **_string
     )
     shipped = Field(
-        description="Status of the item",
+        description="Shipping Status of the item",
+        example=False
+    )
+    stock = Field(
+        description="Stock Status of the item",
         example=False
     )
     inventory = Field(

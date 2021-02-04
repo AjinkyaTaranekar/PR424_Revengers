@@ -34,31 +34,31 @@ def get_uuid() -> str:
 def adminFilesProcessing(path,export_channel,export_item,pricing):
     """Admin Files are Processed here"""
     # Pricing file
-    pri = pd.read_excel(path+pricing, engine='openpyxl')
-    pri.columns = pri.iloc[3]
-    pri = pri.drop(pri.index[0])
-    pri = pri.drop(pri.index[0])
-    pri = pri.drop(pri.index[0])
-    pri = pri.drop(pri.index[0])
+    pricingFile = pd.read_excel(path+pricing, engine='openpyxl')
+    pricingFile.columns = pricingFile.iloc[3]
+    pricingFile = pricingFile.drop(pricingFile.index[0])
+    pricingFile = pricingFile.drop(pricingFile.index[0])
+    pricingFile = pricingFile.drop(pricingFile.index[0])
+    pricingFile = pricingFile.drop(pricingFile.index[0])
 
     # Export Channel Item Type
-    eci = pd.read_csv(path+export_channel, engine ='python')
-    eci = eci[~eci["Channel Name"].str.contains("FLIPKART")]
+    exportChannelItemFile = pd.read_csv(path+export_channel, engine ='python')
+    exportChannelItemFile = exportChannelItemFile[~exportChannelItemFile["Channel Name"].str.contains("FLIPKART")]
     
     # Export Item Master
-    eim = pd.read_csv(path+export_item, engine ='python')
+    exportItemFile = pd.read_csv(path+export_item, engine ='python')
 
     count = 0
     adminData = []
-    for i in range(len(eci)): 
+    for i in range(len(exportChannelItemFile)): 
         adminFile = {}
-        adminFile["asin"] = eci.iloc[i]["Channel Product Id"]
-        adminFile["master_sku"] = eci.iloc[i]["Uniware Sku Code"]
-        adminFile["inventory"] = eci.iloc[i]["Next Inventory Update"]
-        adminFile["our_cost"] = pri.loc[pri['ASIN'] == adminFile["asin"]]['Cost'].values
+        adminFile["asin"] = exportChannelItemFile.iloc[i]["Channel Product Id"]
+        adminFile["master_sku"] = exportChannelItemFile.iloc[i]["Uniware Sku Code"]
+        adminFile["inventory"] = exportChannelItemFile.iloc[i]["Next Inventory Update"]
+        adminFile["our_cost"] = pricingFile.loc[pricingFile['ASIN'] == adminFile["asin"]]['Cost'].values
         adminFile["our_cost"] = adminFile["our_cost"][0] if len(adminFile["our_cost"]) else 0
         sku = adminFile["master_sku"]
-        data = eim.loc[eim['Product Code'] == sku]
+        data = exportItemFile.loc[exportItemFile['Product Code'] == sku]
         adminFile["bundle_items"] = []
         adminFile["name"] = data["Name"].values[0] if len(data["Name"].values) else "NA" 
         adminFile["hsn"] = data["HSN CODE"].values[0] if len(data["HSN CODE"].values) else "NA" 
@@ -66,7 +66,7 @@ def adminFilesProcessing(path,export_channel,export_item,pricing):
         if len(data["Type"].values) and data["Type"].values[0] == "BUNDLE":
             bundle = []
             for i in range(len(data["Component Product Code"].values)):
-                name = eim.loc[eim['Product Code'] == data["Component Product Code"].values[i]]['Name'].values[0]
+                name = exportItemFile.loc[exportItemFile['Product Code'] == data["Component Product Code"].values[i]]['Name'].values[0]
                 bundle.append({
                     "sku": data["Component Product Code"].values[i],
                     "name": name,
@@ -86,10 +86,15 @@ def adminFilesProcessing(path,export_channel,export_item,pricing):
 
 def managerFilesProcessing(path, purchase, quantity = None):
     """Manager Files are Processed here"""
+        
     # Getting Purchase Order
-    poi = pd.read_excel(path + purchase, engine='openpyxl',)
-    po = poi.groupby(["PO"])[['ASIN', 'Unit Cost', 'Quantity Requested', 'Ship to location']].apply(lambda g: list(map(tuple, g.values.tolist()))).to_dict()
+    purchaseOrderFile = pd.read_excel(path + purchase, engine='openpyxl',)
+    po = purchaseOrderFile.groupby(["PO"])[['ASIN', 'Unit Cost', 'Quantity Requested', 'Ship to location']].apply(lambda g: list(map(tuple, g.values.tolist()))).to_dict()
     
+    if quantity:
+        quantityFile = pd.read_excel(path + quantity, skiprows=2,)
+        quantityFile = quantityFile[quantityFile['Barcode'].notna()]
+
     # Fetching Admin data from database 
     adminFile = pd.DataFrame(list(admin.find()))
 
@@ -106,11 +111,19 @@ def managerFilesProcessing(path, purchase, quantity = None):
         database["items"] = []
         for data in po[k]:
             adminData = adminFile.loc[adminFile['asin'] == data[0]]
+            if quantity and not adminData['master_sku'].empty:
+                currentStock = quantityFile.loc[quantityFile["Barcode"] == adminData['master_sku'].values[0]]
+                if currentStock.empty:
+                    currentStock = 0
+                else: 
+                    currentStock = currentStock["Current Stock"].values[0]
+
             database["items"].append({
                 "asin": data[0],
                 "unit_cost": data[1],
                 "quantity": data[2],
-                "shipped": False,
+                "shipped" : False,
+                "stock": True if quantity and currentStock >= data[2] else False,
                 "name": adminData["name"].values[0] if len(adminData["name"]) else "NA",
                 "hsn": adminData["hsn"].values[0] if len(adminData["hsn"]) else "NA",
                 "inventory": adminData["inventory"].values[0] if len(adminData["inventory"]) else "NA",
@@ -187,5 +200,18 @@ def invoiceGenerator(managerData, enterpriseData, enterpriseToData, billedTo):
         os.mkdir(folder_path)
     
     file_path = folder_path + "/" + filename + "_" + billedTo +".docx"
+    document.write(file_path)
+    return file_path
+
+def summaryGenerator(SummaryData):
+    template = "API_engine/template/invoice_template.docx"
+    document = MailMerge(template)
+
+    filename = ""
+    folder_path = "Uploads/invoice/" + filename
+    if not os.path.isdir(folder_path):
+        os.mkdir(folder_path)
+    boxNo = 0
+    file_path = folder_path + "/" + filename + "_" + boxNo +".docx"
     document.write(file_path)
     return file_path

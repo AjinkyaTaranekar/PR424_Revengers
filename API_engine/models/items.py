@@ -22,6 +22,7 @@ class Item(BaseModel):
     name: str = ItemsFields.name
     hsn: str = ItemsFields.hsn
     shipped: bool = ItemsFields.shipped
+    stock: bool = ItemsFields.stock
     inventory: str = ItemsFields.inventory
     master_sku: str = ItemsFields.master_sku
     bundle_item: Optional[BundleItems] = ItemsFields.bundle_item 
