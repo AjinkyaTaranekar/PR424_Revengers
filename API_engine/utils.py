@@ -195,11 +195,11 @@ def invoiceGenerator(managerData, enterpriseData, enterpriseToData, billedTo):
     )
     
     filename = managerData["purchase_order"] + "_Invoice"
-    folder_path = "Uploads/invoice/" + filename
+    folder_path = "Uploads/purchases/" + managerData["purchase_order"]
     if not os.path.isdir(folder_path):
         os.mkdir(folder_path)
     
-    file_path = folder_path + "/" + filename + "_" + billedTo +".docx"
+    file_path = folder_path + "/" + filename + "_" + billedTo + ".docx"
     document.write(file_path)
     return file_path
 
@@ -216,20 +216,63 @@ def summaryGenerator(SummaryData):
         items.append({
             "ASIN": str(item["asin"]),
             "ItemDescription": str(item["name"]),
-            "Quantity": str(item["qty"]),
+            "Quantity": str(int(item["qty"])),
             "SKU": str(item["sku"]),
         })
 
     document.merge_rows('ASIN', items)
 
-    totalQty = sum(float(item["Quantity"]) for item in items)
+    totalQty = sum(int(item["Quantity"]) for item in items)
     
     document.merge(
-        TotalQty = str(totalQty),
+        TotalQuantity = str(totalQty),
     )
     
     filename = SummaryData["purchase_order"] + "_Summary"
-    folder_path = "Uploads/summary/" + SummaryData["purchase_order"].split("_")[0]
+    folder_path = "Uploads/purchases/" + SummaryData["purchase_order"]
+    if not os.path.isdir(folder_path):
+        os.mkdir(folder_path)
+    file_path = folder_path + "/" + filename +".docx"
+    document.write(file_path)
+    return file_path
+
+def pickListGenerator(managerData):
+    template = "API_engine/template/summary_template.docx"
+    document = MailMerge(template)
+    document.merge(
+        PONumber = managerData["purchase_order"],
+        Date = str(datetime.now().date()),
+        Destination = str(managerData["ship_to_location"])
+    )
+    items = []
+    for idx, item in enumerate(managerData["items"]):
+        if len(item["bundle_item"]):
+            for bundle_item in item["bundle_item"]:
+                items.append({
+                    "ASIN": str(item["asin"]),
+                    "ItemDescription": str(bundle_item["name"]),
+                    "Quantity": str(int(bundle_item["quantity"]*item["quantity"])),
+                    "SKU": str(bundle_item["sku"]),
+                })
+        else:
+            items.append({
+                "ASIN": str(item["asin"]),
+                "ItemDescription": str(item["name"]),
+                "Quantity": str(item["quantity"]),
+                "SKU": str(item["master_sku"]),
+            })
+
+    
+    totalQty = sum(int(item["Quantity"]) for item in items)
+    
+    document.merge(
+        TotalQuantity = str(totalQty),
+    )
+    
+    document.merge_rows('ASIN', items)
+
+    filename = managerData["purchase_order"] + "_Pick_List"
+    folder_path = "Uploads/purchases/" + managerData["purchase_order"].split("_")[0]
     if not os.path.isdir(folder_path):
         os.mkdir(folder_path)
     file_path = folder_path + "/" + filename +".docx"

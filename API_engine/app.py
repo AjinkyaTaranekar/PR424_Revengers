@@ -15,7 +15,7 @@ from fastapi.responses import FileResponse
 # # Package # #
 from .models import *
 from .exceptions import *
-from .repositories import UsersRepository, EnterpriseRepository, FileRepository, PurchaseOrderRepository, InvoiceRepository, SummaryRepository
+from .repositories import UsersRepository, EnterpriseRepository, FileRepository, PurchaseOrderRepository, InvoiceRepository, SummaryRepository, PickListRepository
 from .middlewares import request_handler
 from .settings import api_settings as settings
 
@@ -241,7 +241,17 @@ def _get_invoice(billed_from_id: str, billed_to_id: str, purchase_order: str):
 )
 def _get_summary(SummaryData: Summary):
     filePath = SummaryRepository.getSummary(SummaryData)
-    return FileResponse(filePath) 
+    return [FileResponse(filePath)] 
+
+@app.post(
+    "/picklist",
+    description="Create a PickList",
+    status_code=statuscode.HTTP_201_CREATED,
+    tags=["PickList"]
+)
+def _get_picklist(purchase_order: str):
+    filePath = PickListRepository.getPickList(purchase_order)
+    return [FileResponse(filePath)] 
 
 def run():
     """Run the API using Uvicorn"""

@@ -9,14 +9,14 @@ import bcrypt
 from .models import *
 from .exceptions import *
 from .database import users, enterprises, manager
-from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing, invoiceGenerator, summaryGenerator
+from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing, invoiceGenerator, summaryGenerator, pickListGenerator
 
 # # Native # #
 from datetime import datetime
 import shutil
 import os
 
-__all__ = ("UsersRepository","EnterpriseRepository","FileRepository", "PurchaseOrderRepository", "InvoiceRepository")
+__all__ = ("UsersRepository","EnterpriseRepository","FileRepository", "PurchaseOrderRepository", "InvoiceRepository", "SummaryRepository", "PickListRepository")
 
 
 class UsersRepository:
@@ -213,3 +213,14 @@ class SummaryRepository:
         summary = SummaryData.dict()
         summary_path = summaryGenerator(summary)
         return summary_path
+
+class PickListRepository:
+    @staticmethod
+    def getPickList(purchase_order: str):
+        """Retrieve a PickList by its purchaseOrder"""
+        managerData = manager.find_one({"purchase_order": purchase_order})
+        if not managerData:
+            raise PurchaseOrderNotFoundException(purchase_order)
+        
+        pick_list_path = pickListGenerator(managerData)
+        return pick_list_path

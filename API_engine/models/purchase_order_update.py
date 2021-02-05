@@ -9,6 +9,7 @@ from typing import Optional
 # # Package # #
 from .common import BaseModel
 from .fields import PurchaseOrderFields
+from .items import Items
 
 __all__ = ("PurchaseOrderUpdate",)
 
@@ -18,3 +19,4 @@ class PurchaseOrderUpdate(BaseModel):
     tracking_id: Optional[str] = PurchaseOrderFields.tracking_id
     return_status: Optional[str] = PurchaseOrderFields.return_status
     order_status: Optional[str] = PurchaseOrderFields.order_status
+    items: Optional[Items] = PurchaseOrderFields.items
