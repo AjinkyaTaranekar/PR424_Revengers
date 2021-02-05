@@ -184,6 +184,21 @@ class PurchaseOrderRepository:
         result = manager.update_one({"purchase_order": purchaseOrder}, {"$set": document})
         if not result.modified_count:
             raise PurchaseOrderNotFoundException(identifier=purchaseOrder)
+    
+    @staticmethod
+    def updateItemStatus(purchaseOrder: str, asins: list, status: str):
+        """Update a purchaseOrder item status by giving asins to update"""
+        updated = get_time()
+        
+        managerData = manager.find_one({"purchase_order": purchaseOrder})
+        if not managerData:
+            raise PurchaseOrderNotFoundException(purchaseOrder)
+        
+        for asin in asins:
+            result = manager.update_one({"purchase_order": purchaseOrder, "items.asin": asin}, {"$set": {"items.$." + status: True}})
+
+        result = manager.update_one({"purchase_order": purchaseOrder}, {"$set": {"updated": updated}})
+        
 
 class InvoiceRepository:
     @staticmethod

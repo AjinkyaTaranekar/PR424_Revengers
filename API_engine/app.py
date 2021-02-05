@@ -3,11 +3,11 @@ FastAPI app definition, initialization and definition of routes
 """
 
 # # Native # #
-from typing import Optional
+from typing import Optional, List
 
 # # Installed # #
 import uvicorn
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Query
 from fastapi import status as statuscode
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -214,7 +214,7 @@ def _get_purchase_order(purchase_order: str):
 
 @app.patch(
     "/purchase_orders/{purchase_order}",
-    description="Update a single enterprise by its unique ID, providing the fields to update",
+    description="Update a single purchase order by its unique ID, providing the fields to update",
     status_code=statuscode.HTTP_204_NO_CONTENT,
     responses=get_exception_responses(PurchaseOrderNotFoundException, PurchaseOrderAlreadyExistsException),
     tags=["Purchase Order"]
@@ -222,6 +222,16 @@ def _get_purchase_order(purchase_order: str):
 def _update_purchase_order(purchase_order: str, update: PurchaseOrderUpdate):
     PurchaseOrderRepository.update(purchase_order, update)
 
+@app.patch(
+    "/purchase_orders/update_status/{purchase_order}",
+    description="Update an item status by its unique ID",
+    status_code=statuscode.HTTP_204_NO_CONTENT,
+    responses=get_exception_responses(PurchaseOrderNotFoundException),
+    tags=["Purchase Order"]
+)
+def  _update_purchase_order_item_status(purchase_order: str, status : str, asins: List[str] = Query(None)):
+    PurchaseOrderRepository.updateItemStatus(purchase_order, asins, status)
+    
 @app.post(
     "/invoice",
     description="Create an Invoice",

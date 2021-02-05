@@ -246,7 +246,7 @@ def pickListGenerator(managerData):
     )
     items = []
     for idx, item in enumerate(managerData["items"]):
-        if len(item["bundle_item"]):
+        if "bundle_item" in item.keys() and len(item["bundle_item"]):
             for bundle_item in item["bundle_item"]:
                 items.append({
                     "ASIN": str(item["asin"]),
