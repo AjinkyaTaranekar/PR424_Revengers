@@ -268,3 +268,54 @@ INFO:     49.36.35.145:53294 - "POST /users/login?email=test&password=test HTTP/
 INFO:     49.36.35.145:53301 - "POST /users/login?email=test&password=test HTTP/1.1" 404 Not Found
 INFO:     49.36.35.145:53316 - "GET /redoc HTTP/1.1" 200 OK
 INFO:     49.36.35.145:53316 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     Started server process [912]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     49.36.37.111:63483 - "POST /picklist?purchase_order=1DA74CHR HTTP/1.1" 201 Created
+INFO:     157.34.39.117:62584 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:62585 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     157.34.39.117:62645 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:62713 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:62713 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     157.34.39.117:63547 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:63548 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:63548 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     157.34.39.117:63911 - "POST /users/login?email=manager%40robotbanao.com&password=manager%40robo%2326 HTTP/1.1" 200 OK
+INFO:     157.34.39.117:63911 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:63911 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     157.34.39.117:63916 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:63916 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     157.34.39.117:64102 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:49528 - "GET /redoc HTTP/1.1" 200 OK
+INFO:     157.34.39.117:49528 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     Started server process [2005]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     49.36.37.111:62461 - "GET /docs HTTP/1.1" 200 OK
+INFO:     49.36.37.111:62461 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51008 - "POST /users/login?email=manager%40robotbanao.com&password=manager%40robo%2326 HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51008 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51009 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51026 - "POST /invoice HTTP/1.1" 422 Unprocessable Entity
+INFO:     157.34.39.117:51060 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51060 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51121 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     49.36.37.111:62569 - "POST /users/login?email=packager%40robotbanao.com&password=packager%40robo%2326 HTTP/1.1" 200 OK
+INFO:     49.36.37.111:62569 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     49.36.37.111:62574 - "POST /picklist?purchase_order=1DA74CHR HTTP/1.1" 201 Created
+INFO:     157.34.39.117:51122 - "POST /users/login?email=manager%40robotbanao.com&password=manager%40robo%2326 HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51122 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51122 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51156 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51156 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     Started server process [2082]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     49.36.37.111:62644 - "POST /picklist?purchase_order=12R15GHY HTTP/1.1" 201 Created
+INFO:     157.34.39.117:1054 - "GET /purchase_orders HTTP/1.1" 200 OK
+INFO:     157.34.39.117:1054 - "GET /enterprises HTTP/1.1" 200 OK
+INFO:     157.34.39.117:51389 - "POST /invoice HTTP/1.1" 422 Unprocessable Entity
+INFO:     157.34.39.117:51399 - "GET /purchase_orders HTTP/1.1" 200 OK

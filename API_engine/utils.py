@@ -195,13 +195,14 @@ def invoiceGenerator(managerData, enterpriseData, enterpriseToData, billedTo):
     )
     
     filename = managerData["purchase_order"] + "_Invoice"
-    folder_path = "Uploads/purchases/" + managerData["purchase_order"]
+    folder_path = "Uploads/" + managerData["purchase_order"]
     if not os.path.isdir(folder_path):
-        os.mkdir(folder_path)
+        os.makedirs(folder_path)
     
     file_path = folder_path + "/" + filename + "_" + billedTo + ".docx"
     document.write(file_path)
-    return file_path
+    url = managerData["purchase_order"] + "/" + filename + "_" + billedTo + ".docx"
+    return url
 
 def summaryGenerator(SummaryData):
     template = "API_engine/template/summary_template.docx"
@@ -229,12 +230,13 @@ def summaryGenerator(SummaryData):
     )
     
     filename = SummaryData["purchase_order"] + "_Summary"
-    folder_path = "Uploads/purchases/" + SummaryData["purchase_order"]
+    folder_path = "Uploads/" + SummaryData["purchase_order"]
     if not os.path.isdir(folder_path):
-        os.mkdir(folder_path)
+        os.makedirs(folder_path)
     file_path = folder_path + "/" + filename +".docx"
     document.write(file_path)
-    return file_path
+    url = SummaryData["purchase_order"] + "/" + filename + ".docx"
+    return url
 
 def pickListGenerator(managerData):
     template = "API_engine/template/summary_template.docx"
@@ -272,9 +274,10 @@ def pickListGenerator(managerData):
     document.merge_rows('ASIN', items)
 
     filename = managerData["purchase_order"] + "_Pick_List"
-    folder_path = "Uploads/purchases/" + managerData["purchase_order"].split("_")[0]
+    folder_path = "Uploads/" + managerData["purchase_order"].split("_")[0]
     if not os.path.isdir(folder_path):
-        os.mkdir(folder_path)
+        os.makedirs(folder_path)
     file_path = folder_path + "/" + filename +".docx"
     document.write(file_path)
-    return file_path
+    url = managerData["purchase_order"].split("_")[0] + "/" + filename + ".docx"
+    return url
