@@ -11,7 +11,7 @@ from pydantic import Field
 # # Package # #
 from ..utils import get_time, get_uuid
 
-__all__ = ("UserFields", "AddressFields", "EnterpriseFields", "PurchaseOrderFields", "ItemsFields", "SummaryFields")
+__all__ = ("UserFields", "AddressFields", "EnterpriseFields", "PurchaseOrderFields", "ItemsFields", "SummaryFields", "PurchaseOrderStatusFields")
 
 _string = dict(min_length=1)
 """Common attributes for all String fields"""
@@ -294,6 +294,20 @@ class PurchaseOrderFields:
     )
     """Created is set on UsersRepository.update (and initially on create)"""
 
+class PurchaseOrderStatusFields:
+    purchase_order = Field(
+        description="Purchase Order of the purchase",
+        example="XXXXXXXXX",
+    )
+    status = Field(
+        description="Stock/Shipped Status of the purchase",
+        example="stock",
+        **_string
+    )
+    asins = Field(
+        description="ASINs List in this purchase"
+    )
+
 class SummaryFields:
     po = Field(
         description="Purchase Order of the Summary",
@@ -307,4 +321,23 @@ class SummaryFields:
     )
     items = Field(
         description="Item List",
+    )
+
+class InvoiceFields:
+    purchase_order = Field(
+        description="Purchase Order of the Invoice",
+        example="PO3251324",
+        **_string
+    )
+    billed_to_id = Field(
+        description="Unique identifier of the entereprise in the database, which has purchased",
+        example=get_uuid(),
+        min_length=36,
+        max_length=36
+    )
+    billed_from_id = Field(
+        description="Unique identifier of the entereprise in the database, from purchase is made",
+        example=get_uuid(),
+        min_length=36,
+        max_length=36
     )

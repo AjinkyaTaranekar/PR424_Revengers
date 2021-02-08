@@ -186,35 +186,38 @@ class PurchaseOrderRepository:
             raise PurchaseOrderNotFoundException(identifier=purchaseOrder)
     
     @staticmethod
-    def updateItemStatus(purchaseOrder: str, asins: list, status: str):
+    def updateItemStatus(update: PurchaseOrderUpdate):
         """Update a purchaseOrder item status by giving asins to update"""
+        update = update.dict()
         updated = get_time()
         
-        managerData = manager.find_one({"purchase_order": purchaseOrder})
+        managerData = manager.find_one({"purchase_order": update["purchase_order"]})
         if not managerData:
-            raise PurchaseOrderNotFoundException(purchaseOrder)
+            raise PurchaseOrderNotFoundException(update["purchase_order"])
         
-        for asin in asins:
-            result = manager.update_one({"purchase_order": purchaseOrder, "items.asin": asin}, {"$set": {"items.$." + status: True}})
+        for asin in update["asins"]:
+            result = manager.update_one({"purchase_order": update["purchase_order"], "items.asin": asin}, {"$set": {"items.$." + update["status"]: True}})
 
-        result = manager.update_one({"purchase_order": purchaseOrder}, {"$set": {"updated": updated}})
+        result = manager.update_one({"purchase_order": update["purchase_order"]}, {"$set": {"updated": updated}})
         
 
 class InvoiceRepository:
     @staticmethod
-    def getInvoice(purchase_order: str, billed_from_id: str, billed_to_id: str):
+    def getInvoice(InvoiceData: Invoice):
         """Retrieve a single Invoice by its purchaseOrder and enterpriseNumber"""
-        managerData = manager.find_one({"purchase_order": purchase_order})
+        InvoiceData = InvoiceData.dict()
+        
+        managerData = manager.find_one({"purchase_order": InvoiceData["purchase_order"]})
         if not managerData:
-            raise PurchaseOrderNotFoundException(purchase_order)
+            raise PurchaseOrderNotFoundException(InvoiceData["purchase_order"])
         
-        enterpriseData = enterprises.find_one({"_id": billed_from_id})
+        enterpriseData = enterprises.find_one({"_id": InvoiceData["billed_from_id"]})
         if not enterpriseData:
-            raise EnterpriseNotFoundException(billed_from_id)
+            raise EnterpriseNotFoundException(InvoiceData["billed_from_id"])
         
-        enterpriseToData = enterprises.find_one({"_id": billed_to_id})
+        enterpriseToData = enterprises.find_one({"_id": InvoiceData["billed_to_id"]})
         if not enterpriseToData:
-            raise EnterpriseNotFoundException(billed_to_id)
+            raise EnterpriseNotFoundException(InvoiceData["billed_to_id"])
 
         customer_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"customer")
         seller_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"seller")

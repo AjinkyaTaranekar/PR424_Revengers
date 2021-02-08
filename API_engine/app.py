@@ -229,8 +229,8 @@ def _update_purchase_order(purchase_order: str, update: PurchaseOrderUpdate):
     responses=get_exception_responses(PurchaseOrderNotFoundException),
     tags=["Purchase Order"]
 )
-def  _update_purchase_order_item_status(purchase_order: str, status : str, asins: List[str] = Query(None)):
-    PurchaseOrderRepository.updateItemStatus(purchase_order, asins, status)
+def  _update_purchase_order_item_status(update: PurchaseOrderStatusUpdate):
+    PurchaseOrderRepository.updateItemStatus(update)
     
 @app.post(
     "/invoice",
@@ -239,8 +239,8 @@ def  _update_purchase_order_item_status(purchase_order: str, status : str, asins
     responses=get_exception_responses(PurchaseOrderNotFoundException,EnterpriseNotFoundException),
     tags=["Invoice"]
 )
-def _get_invoice(billed_from_id: str, billed_to_id: str, purchase_order: str):
-    filePaths = InvoiceRepository.getInvoice(purchase_order,billed_from_id,billed_to_id)
+def _get_invoice(InvoiceData: Invoice):
+    filePaths = InvoiceRepository.getInvoice(InvoiceData)
     return [FileResponse(filePath) for filePath in filePaths]
 
 @app.post(
