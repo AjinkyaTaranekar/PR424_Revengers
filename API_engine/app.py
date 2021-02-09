@@ -223,7 +223,7 @@ def _update_purchase_order(purchase_order: str, update: PurchaseOrderUpdate):
     PurchaseOrderRepository.update(purchase_order, update)
 
 @app.patch(
-    "/purchase_orders/update_status/{purchase_order}",
+    "/purchase_orders/update_status",
     description="Update an item status by its unique ID",
     status_code=statuscode.HTTP_204_NO_CONTENT,
     responses=get_exception_responses(PurchaseOrderNotFoundException),
