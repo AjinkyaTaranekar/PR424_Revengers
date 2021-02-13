@@ -174,8 +174,7 @@ class AddressFields:
         example="452005",
         **_string
     )
-
-class ItemsFields:
+class AsinFields:
     asin = Field(
         description="ASIN of the Item",
         example="BP*********",
@@ -191,14 +190,6 @@ class ItemsFields:
         example="8059",
         **_string
     )
-    shipped = Field(
-        description="Shipping Status of the item",
-        example=False
-    )
-    stock = Field(
-        description="Stock Status of the item",
-        example=False
-    )
     inventory = Field(
         description="Inventory of Item",
         example="42",
@@ -212,20 +203,39 @@ class ItemsFields:
     bundle_item = Field(
         description="Sub item present in Items, if Bundled",
     )
-    unit_cost = Field(
-        description="Unit Cost of the product on Amazon",
-        example="1000.0",
-        **_string
-    )
     our_cost = Field(
         description="Cost of the product",
         example="1200.0",
         **_string
     )
+    
+class ItemsFields:
+    asin_id = Field(
+        description="ASIN Id of the Item",
+        example=get_uuid(),
+        min_length=36,
+        max_length=36
+    )
+    shipped = Field(
+        description="Shipping Status of the item",
+        example=False
+    )
+    stock = Field(
+        description="Stock Status of the item",
+        example=False
+    )
+    unit_cost = Field(
+        description="Unit Cost of the item on Amazon",
+        example="1000.0",
+        **_string
+    )
     quantity = Field(
-        description="Quantity of the product requested",
+        description="Quantity of the item requested",
         example="45",
         **_string
+    )
+    details = Field(
+        description="Details of the item requested"
     )
 
 class BundleItemsFields:
@@ -277,6 +287,10 @@ class PurchaseOrderFields:
         description="Order Status of the purchase",
         example="Incoming",
         **_string
+    )
+    completed_status = Field(
+        description="Completed Status of the purchase",
+        example=True
     )
     items = Field(
         description="Items object where this purchase"

@@ -13,3 +13,4 @@ from .items import *
 from .bundleItems import *
 from .summary import *
 from .invoice import *
+from .asin_info import *

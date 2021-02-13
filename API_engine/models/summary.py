@@ -10,17 +10,17 @@ import pydantic
 
 # # Package # #
 from .common import BaseModel
-from .fields import ItemsFields, SummaryFields
+from .fields import AsinFields, SummaryFields, ItemsFields
 from .bundleItems import BundleItems
 
 __all__ = ("Summary", "SummaryItems", "SummaryItem")
 
 class SummaryItem(BaseModel):
     """The item information of a purchase summary"""
-    asin: str = ItemsFields.asin
-    name: str = ItemsFields.name
+    asin: str = AsinFields.asin
+    name: str = AsinFields.name
     qty: str = ItemsFields.quantity
-    sku: str = ItemsFields.master_sku
+    sku: str = AsinFields.master_sku
     
 SummaryItems = List[SummaryItem]
 

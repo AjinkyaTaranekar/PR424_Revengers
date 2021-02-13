@@ -8,7 +8,7 @@ import bcrypt
 # # Package # #
 from .models import *
 from .exceptions import *
-from .database import users, enterprises, manager
+from .database import users, enterprises, manager, admin
 from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing, invoiceGenerator, summaryGenerator, pickListGenerator
 
 # # Native # #
@@ -164,7 +164,9 @@ class PurchaseOrderRepository:
     @staticmethod
     def get(purchaseOrder: str) -> PurchaseOrderRead:
         """Retrieve a single PurchaseOrder by its unique id"""
-        document = manager.find_one({"purchase_order": purchaseOrder})
+        document = manager.find_one({"purchase_order": purchaseOrder}).dict()
+        for items in document['items']: 
+            items['details'] = admin.find_one({"_id": items['asin_id']}).dict()
         if not document:
             raise PurchaseOrderNotFoundException(purchaseOrder)
         return PurchaseOrderRead(**document)
@@ -173,6 +175,11 @@ class PurchaseOrderRepository:
     def list() -> PurchaseOrdersRead:
         """Retrieve all the available purchaseOrders"""
         cursor = manager.find()
+        for document in cursor:
+            document = document.dict()
+            for items in document['items']: 
+                items['details'] = admin.find_one({"_id": items['asin_id']}).dict()
+            
         return [PurchaseOrderRead(**document) for document in cursor]
 
     @staticmethod

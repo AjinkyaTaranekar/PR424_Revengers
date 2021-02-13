@@ -106,6 +106,7 @@ def managerFilesProcessing(path, purchase, quantity = None):
         database["tracking_id"] = "NA"
         database["return_status"] = "NA"
         database["order_status"] = "Incoming"
+        database["completed_status"] = False
         database["ship_to_location"] = po[k][0][3]
         database["created"] = database["updated"] = get_time() 
         database["items"] = []
@@ -119,17 +120,12 @@ def managerFilesProcessing(path, purchase, quantity = None):
                     currentStock = currentStock["Current Stock"].values[0]
 
             database["items"].append({
-                "asin": data[0],
+                "asin_id": adminFile['_id'],
                 "unit_cost": data[1],
                 "quantity": data[2],
                 "shipped" : False,
                 "stock": True if quantity and currentStock >= data[2] else False,
-                "name": adminData["name"].values[0] if len(adminData["name"]) else "NA",
-                "hsn": adminData["hsn"].values[0] if len(adminData["hsn"]) else "NA",
-                "inventory": adminData["inventory"].values[0] if len(adminData["inventory"]) else "NA",
-                "master_sku" : adminData["master_sku"].values[0] if len(adminData["master_sku"]) else "NA",
-                "bundle_item": adminData["bundle_items"].values[0] if len(adminData["bundle_items"]) else [],
-                "our_cost": adminData["our_cost"].values[0] if len(adminData["our_cost"]) else "NA"
+                "details": {}
             })
         managerData.append(database)
     managerData
