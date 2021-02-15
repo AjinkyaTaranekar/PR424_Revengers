@@ -11,14 +11,14 @@ from fastapi.responses import JSONResponse
 from .models import *
 from .exceptions import *
 from .database import users, enterprises, manager, admin
-from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing, invoiceGenerator, summaryGenerator, pickListGenerator
+from .utils import get_time, get_uuid, adminFilesProcessing, managerFilesProcessing, invoiceGenerator, summaryGenerator, pickListGenerator, barcodeGenerator
 
 # # Native # #
 from datetime import datetime
 import shutil
 import os
 
-__all__ = ("UsersRepository","EnterpriseRepository","FileRepository", "PurchaseOrderRepository", "InvoiceRepository", "SummaryRepository", "PickListRepository", "InventoryRepository")
+__all__ = ("UsersRepository","EnterpriseRepository","FileRepository", "PurchaseOrderRepository", "OrderRepository", "InventoryRepository")
 
 
 class UsersRepository:
@@ -260,7 +260,7 @@ class PurchaseOrderRepository:
             raise PurchaseOrderNotFoundException(identifier=purchaseOrder)
     
     @staticmethod
-    def updateItemStatus(update: PurchaseOrderUpdate):
+    def updateItemStatus(update: PurchaseOrderStatusUpdate):
         """Update a purchaseOrder item status by giving asins to update"""
         update = update.dict()
         updated = get_time()
@@ -270,16 +270,30 @@ class PurchaseOrderRepository:
         if not managerData:
             raise PurchaseOrderNotFoundException(update["purchase_order"])
         
-        for items in managerData['items']: 
-            items['details'] = admin.find_one({"_id": items["asin_id"]})
+        for asin_id in update["asins"]:
+            #print(manager.find_one({"purchase_order": update["purchase_order"], "items.asin_id": asin_id}))
+            result = manager.update_one({"purchase_order": update["purchase_order"], "items.asin_id": asin_id}, {"$set": {"items.$." + update["status"]: True}})
 
-        for asin in update["asins"]:
-            result = manager.update_one({"purchase_order": update["purchase_order"], "items.details.asin": asin}, {"$set": {"items.$." + update["status"]: True}})
+        result = manager.update_one({"purchase_order": update["purchase_order"]}, {"$set": {"updated": updated}})
+    
+    @staticmethod
+    def updateItemUnitCost(update: PurchaseOrderItemUpdate):
+        """Update a purchaseOrder unit cost by giving asins to update"""
+        update = update.dict()
+        updated = get_time()
+        #print("here")
+        managerData = manager.find_one({"purchase_order": update["purchase_order"]})
+        
+        if not managerData:
+            raise PurchaseOrderNotFoundException(update["purchase_order"])
+
+        for items in update["update"]:
+            result = manager.update_one({"purchase_order": update["purchase_order"], "items.asin_id": items["asin_id"]}, {"$set": {"items.$.unit_cost" : items["unit_cost"]}})
 
         result = manager.update_one({"purchase_order": update["purchase_order"]}, {"$set": {"updated": updated}})
         
 
-class InvoiceRepository:
+class OrderRepository:
     @staticmethod
     def getInvoice(InvoiceData: Invoice):
         """Retrieve a single Invoice by its purchaseOrder and enterpriseNumber"""
@@ -304,7 +318,6 @@ class InvoiceRepository:
         transporter_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"transporter")
         return [customer_path, seller_path, transporter_path]
 
-class SummaryRepository:
     @staticmethod
     def getSummary(SummaryData: Summary, boxNo: str):
         """Retrieve a summary"""
@@ -312,7 +325,6 @@ class SummaryRepository:
         summary_path = summaryGenerator(summary, boxNo)
         return summary_path
 
-class PickListRepository:
     @staticmethod
     def getPickList(purchase_order: str):
         """Retrieve a PickList by its purchaseOrder"""
@@ -324,3 +336,15 @@ class PickListRepository:
         
         pick_list_path = pickListGenerator(managerData)
         return pick_list_path
+
+    @staticmethod
+    def getBarcode(purchase_order: str):
+        """Retrieve a Barcode by its purchaseOrder"""
+        managerData = manager.find_one({"purchase_order": purchase_order})
+        if not managerData:
+            raise PurchaseOrderNotFoundException(purchase_order)
+        for items in managerData['items']: 
+            items['details'] = admin.find_one({"_id": items["asin_id"]})
+        
+        barcode_path = barcodeGenerator(managerData)
+        return barcode_path

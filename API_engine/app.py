@@ -15,7 +15,7 @@ from fastapi.responses import FileResponse
 # # Package # #
 from .models import *
 from .exceptions import *
-from .repositories import UsersRepository, EnterpriseRepository, FileRepository, PurchaseOrderRepository, InvoiceRepository, SummaryRepository, PickListRepository, InventoryRepository
+from .repositories import UsersRepository, EnterpriseRepository, FileRepository, PurchaseOrderRepository, OrderRepository, InventoryRepository
 from .middlewares import request_handler
 from .settings import api_settings as settings
 
@@ -281,7 +281,7 @@ def _get_purchase_order(purchase_order: str):
 def _update_purchase_order(purchase_order: str, update: PurchaseOrderUpdate):
     PurchaseOrderRepository.update(purchase_order, update)
 
-@app.patch(
+@app.post(
     "/purchase_orders/update_status",
     description="Update an item status by its unique ID",
     status_code=statuscode.HTTP_204_NO_CONTENT,
@@ -290,36 +290,56 @@ def _update_purchase_order(purchase_order: str, update: PurchaseOrderUpdate):
 )
 def  _update_purchase_order_item_status(update: PurchaseOrderStatusUpdate):
     PurchaseOrderRepository.updateItemStatus(update)
+
+@app.post(
+    "/purchase_orders/unit_cost",
+    description="Update an unit cost by its unique ID",
+    status_code=statuscode.HTTP_204_NO_CONTENT,
+    responses=get_exception_responses(PurchaseOrderNotFoundException),
+    tags=["Purchase Order"]
+)
+def  _update_purchase_order_item_unit_cost(update: PurchaseOrderItemUpdate):
+    PurchaseOrderRepository.updateItemUnitCost(update)
     
 @app.post(
     "/invoice",
     description="Create an Invoice",
     status_code=statuscode.HTTP_201_CREATED,
     responses=get_exception_responses(PurchaseOrderNotFoundException,EnterpriseNotFoundException),
-    tags=["Invoice"]
+    tags=["Order Files"]
 )
 def _get_invoice(InvoiceData: Invoice):
-    filePaths = InvoiceRepository.getInvoice(InvoiceData)
+    filePaths = OrderRepository.getInvoice(InvoiceData)
     return [FileResponse(filePath) for filePath in filePaths]
 
 @app.post(
     "/summary",
     description="Create a Summary",
     status_code=statuscode.HTTP_201_CREATED,
-    tags=["Summary"]
+    tags=["Order Files"]
 )
 def _get_summary(SummaryData: Summary, boxNo: str):
-    filePath = SummaryRepository.getSummary(SummaryData, boxNo)
+    filePath = OrderRepository.getSummary(SummaryData, boxNo)
     return [FileResponse(filePath)] 
 
 @app.post(
     "/picklist",
     description="Create a PickList",
     status_code=statuscode.HTTP_201_CREATED,
-    tags=["PickList"]
+    tags=["Order Files"]
 )
 def _get_picklist(purchase_order: str):
-    filePath = PickListRepository.getPickList(purchase_order)
+    filePath = OrderRepository.getPickList(purchase_order)
+    return [FileResponse(filePath)] 
+
+@app.post(
+    "/barcode",
+    description="Create a Barcode",
+    status_code=statuscode.HTTP_201_CREATED,
+    tags=["Order Files"]
+)
+def _get_barcode(purchase_order: str):
+    filePath = OrderRepository.getBarcode(purchase_order)
     return [FileResponse(filePath)] 
 
 def run():

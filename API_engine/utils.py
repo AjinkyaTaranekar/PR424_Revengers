@@ -19,7 +19,7 @@ from mailmerge import MailMerge
 from num2words import num2words
 from datetime import datetime
 
-__all__ = ("get_time", "get_uuid", "adminFilesProcessing", "managerFilesProcessing", "invoiceGenerator", "summaryGenerator")
+__all__ = ("get_time", "get_uuid", "adminFilesProcessing", "managerFilesProcessing", "invoiceGenerator", "summaryGenerator", "barcodeGenerator")
 
 
 def get_time(seconds_precision=True) -> Union[int, float]:
@@ -302,5 +302,28 @@ def pickListGenerator(managerData):
         os.makedirs(folder_path)
     file_path = folder_path + "/" + filename +".docx"
     document.write(file_path)
+    url = managerData["purchase_order"].split("_")[0] + "/" + filename + ".docx"
+    return url
+
+def barcodeGenerator(managerData):
+    items = []
+    for idx, item in enumerate(managerData["items"]):
+        items.append({
+            "Item No": idx+1,
+            "ASIN": str(item["details"]["asin"]),
+            "ItemDescription": str(item["details"]["name"]),
+            "Quantity": item["quantity"],
+            "SKU": item["details"]["master_sku"],
+        })
+
+    df = pd.DataFrame(items)
+
+    filename = managerData["purchase_order"] + "_Barcode"
+    folder_path = "Uploads/" + managerData["purchase_order"].split("_")[0]
+    if not os.path.isdir(folder_path):
+        os.makedirs(folder_path)
+    file_path = folder_path + "/" + filename +".xlsx"
+    
+    df.to_excel(file_path)
     url = managerData["purchase_order"].split("_")[0] + "/" + filename + ".docx"
     return url
