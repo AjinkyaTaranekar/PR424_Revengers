@@ -237,14 +237,10 @@ class PurchaseOrderRepository:
     @staticmethod
     def filter(appt_date: str):
         """Retrieve all the available purchaseOrders with filter"""
-        cursor = manager.find_one({"appt_date": appt_date})
-        if not cursor:
-            return JSONResponse(
-                content="Purchase order List Not Found",
-                status_code=404
-            )
+        cursor = manager.find({"appt_date": appt_date})
         documents = []
-        for document in [cursor]:
+        #print(cursor)
+        for document in cursor:
             documents.append({
                 "appt_notes": document['appt_notes'],
                 "purchase_order": document['purchase_order']
