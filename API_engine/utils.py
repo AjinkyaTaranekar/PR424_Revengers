@@ -223,21 +223,22 @@ def invoiceGenerator(managerData, enterpriseData, enterpriseToData, billedTo):
     }})
     return url
 
-def summaryGenerator(SummaryData):
-    template = "API_engine/template/summary_template.docx"
+def summaryGenerator(SummaryData, boxNo):
+    template = "API_engine/template/box_summary_template.docx"
     document = MailMerge(template)
     document.merge(
         PONumber = SummaryData["purchase_order"],
         Date = str(datetime.now().date()),
+        BoxNo = boxNo,
         Destination = str(SummaryData["destination"])
     )
     items = []
     for idx, item in enumerate(SummaryData["items"]):
         items.append({
             "ASIN": str(item["asin"]),
-            "ItemDescription": str(item["details"]["name"]),
+            "ItemDescription": str(item["name"]),
             "Quantity": str(int(item["qty"])),
-            "SKU": str(item["details"]["sku"]),
+            "SKU": str(item["sku"]),
         })
 
     document.merge_rows('ASIN', items)
@@ -248,20 +249,20 @@ def summaryGenerator(SummaryData):
         TotalQuantity = str(totalQty),
     )
     
-    filename = SummaryData["purchase_order"] + "_Summary"
+    filename = SummaryData["purchase_order"] + "_box_" + boxNo + "_Summary"
     folder_path = "Uploads/" + SummaryData["purchase_order"]
     if not os.path.isdir(folder_path):
         os.makedirs(folder_path)
     file_path = folder_path + "/" + filename +".docx"
     document.write(file_path)
     url = SummaryData["purchase_order"] + "/" + filename + ".docx"
-    manager.update_one({"po": SummaryData["purchase_order"]}, {"$push": {
+    manager.update_one({"purchase_order": SummaryData["purchase_order"]}, {"$push": {
         "box": "http://104.45.155.38:5002/" + url
     }})
     return url
 
 def pickListGenerator(managerData):
-    template = "API_engine/template/summary_template.docx"
+    template = "API_engine/template/pick_list_template.docx"
     document = MailMerge(template)
     document.merge(
         PONumber = managerData["purchase_order"],
@@ -270,10 +271,10 @@ def pickListGenerator(managerData):
     )
     items = []
     for idx, item in enumerate(managerData["items"]):
-        if "bundle_item" in item["details"].keys() and len(item["details"]["bundle_item"]):
-            for bundle_item in item["details"]["bundle_item"]:
+        if "bundle_items" in item["details"].keys() and len(item["details"]["bundle_items"]):
+            for bundle_item in item["details"]["bundle_items"]:
                 items.append({
-                    "ASIN": str(item["asin"]),
+                    "ASIN": str(item["details"]["asin"]),
                     "ItemDescription": str(bundle_item["name"]),
                     "Quantity": str(int(bundle_item["quantity"]*item["quantity"])),
                     "SKU": str(bundle_item["sku"]),

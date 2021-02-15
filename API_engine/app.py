@@ -301,8 +301,8 @@ def _get_invoice(InvoiceData: Invoice):
     status_code=statuscode.HTTP_201_CREATED,
     tags=["Summary"]
 )
-def _get_summary(SummaryData: Summary):
-    filePath = SummaryRepository.getSummary(SummaryData)
+def _get_summary(SummaryData: Summary, boxNo: str):
+    filePath = SummaryRepository.getSummary(SummaryData, boxNo)
     return [FileResponse(filePath)] 
 
 @app.post(

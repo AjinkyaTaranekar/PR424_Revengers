@@ -290,10 +290,10 @@ class InvoiceRepository:
 
 class SummaryRepository:
     @staticmethod
-    def getSummary(SummaryData: Summary):
+    def getSummary(SummaryData: Summary, boxNo: str):
         """Retrieve a summary"""
         summary = SummaryData.dict()
-        summary_path = summaryGenerator(summary)
+        summary_path = summaryGenerator(summary, boxNo)
         return summary_path
 
 class PickListRepository:
@@ -303,6 +303,8 @@ class PickListRepository:
         managerData = manager.find_one({"purchase_order": purchase_order})
         if not managerData:
             raise PurchaseOrderNotFoundException(purchase_order)
+        for items in managerData['items']: 
+            items['details'] = admin.find_one({"_id": items["asin_id"]})
         
         pick_list_path = pickListGenerator(managerData)
         return pick_list_path
