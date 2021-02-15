@@ -5,6 +5,7 @@ Methods to interact with the database
 # # Installed # #
 import bcrypt
 from bson.objectid import ObjectId
+from fastapi.responses import JSONResponse
 
 # # Package # #
 from .models import *
@@ -232,7 +233,26 @@ class PurchaseOrderRepository:
             documents.append(document)
         #print(documents)    
         return [PurchaseOrderRead(**document) for document in documents]
-
+    
+    @staticmethod
+    def filter(appt_date: str):
+        """Retrieve all the available purchaseOrders with filter"""
+        cursor = manager.find_one({"appt_date": appt_date})
+        if not cursor:
+            return JSONResponse(
+                content="Purchase order List Not Found",
+                status_code=404
+            )
+        documents = []
+        for document in [cursor]:
+            documents.append({
+                "appt_notes": document['appt_notes'],
+                "purchase_order": document['purchase_order']
+            })
+        return JSONResponse(
+                content=documents,
+                status_code=200
+            )
     @staticmethod
     def update(purchaseOrder: str, update: PurchaseOrderUpdate):
         """Update a purchaseOrder by giving only the fields to update"""

@@ -253,6 +253,13 @@ def _list_purchase_order():
     # TODO Filters
     return PurchaseOrderRepository.list()
 
+@app.get(
+    "/purchase_orders/filter",
+    description="List all the available purchase orders on an appointment date",
+    tags=["Purchase Order"]
+)
+def _list_purchase_order_at_appointment_date(appt_date: str):
+    return PurchaseOrderRepository.filter(appt_date)
 
 @app.get(
     "/purchase_orders/{purchase_order}",
