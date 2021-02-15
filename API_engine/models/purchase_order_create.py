@@ -24,6 +24,6 @@ class PurchaseOrderCreate(PurchaseOrderUpdate):
     ship_to_location: str = PurchaseOrderFields.ship_to_location
     box: List[str] = PurchaseOrderFields.box
     total_amt: int = PurchaseOrderFields.total_amt
-    invoice : str  = PurchaseOrderFields.invoice
+    invoice : List[str]  = PurchaseOrderFields.invoice
     appt_date : str  = PurchaseOrderFields.appt_date
     appt_notes: str  = PurchaseOrderFields.appt_notes

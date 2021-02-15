@@ -250,9 +250,13 @@ class PurchaseOrderRepository:
         updated = get_time()
         
         managerData = manager.find_one({"purchase_order": update["purchase_order"]})
+        
         if not managerData:
             raise PurchaseOrderNotFoundException(update["purchase_order"])
         
+        for items in managerData['items']: 
+            items['details'] = admin.find_one({"_id": items["asin_id"]})
+
         for asin in update["asins"]:
             result = manager.update_one({"purchase_order": update["purchase_order"], "items.details.asin": asin}, {"$set": {"items.$." + update["status"]: True}})
 
@@ -268,6 +272,8 @@ class InvoiceRepository:
         managerData = manager.find_one({"purchase_order": InvoiceData["purchase_order"]})
         if not managerData:
             raise PurchaseOrderNotFoundException(InvoiceData["purchase_order"])
+        for items in managerData['items']: 
+            items['details'] = admin.find_one({"_id": items["asin_id"]})
         
         enterpriseData = enterprises.find_one({"_id": InvoiceData["billed_from_id"]})
         if not enterpriseData:

@@ -22,7 +22,7 @@ class PurchaseOrderUpdate(BaseModel):
     completed_status: Optional[bool] = PurchaseOrderFields.completed_status
     box: Optional[List[str]] = PurchaseOrderFields.box
     total_amt: Optional[int] = PurchaseOrderFields.total_amt
-    invoice : Optional[str]  = PurchaseOrderFields.invoice
+    invoice : Optional[List[str]]  = PurchaseOrderFields.invoice
     appt_date : Optional[str] = PurchaseOrderFields.appt_date
     appt_notes: Optional[str] = PurchaseOrderFields.appt_notes
     

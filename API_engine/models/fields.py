@@ -322,9 +322,7 @@ class PurchaseOrderFields:
         example=450
     )
     invoice  = Field(
-        description="Invoice URL of the purchase",
-        example="http:localhost:5001/Uploads/",
-        **_string
+        description="Invoice URLs of the purchase"
     )
     appt_date  = Field(
         description="Appointment Date of the purchase",

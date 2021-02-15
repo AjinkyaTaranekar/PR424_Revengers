@@ -120,7 +120,7 @@ def managerFilesProcessing(path, purchase, quantity = None):
         database["ship_to_location"] = po[k][0][3]
         database["box"] = []
         database["total_amt"] = 0
-        database["invoice"] = "NA"
+        database["invoice"] = []
         database["appt_date"] = "NA"
         database["appt_notes"] = "NA"
         database["created"] = database["updated"] = get_time() 
@@ -194,7 +194,7 @@ def invoiceGenerator(managerData, enterpriseData, enterpriseToData, billedTo):
     cgst = sgst = round(subTotal*0.09,2)
     
     total = round(subTotal + cgst + sgst)
-    roundOff = subTotal + cgst + sgst - total
+    roundOff = round(subTotal + cgst + sgst - total,2)
     totalNum = num2words(total, lang='en_IN').title()
 
     document.merge(
@@ -215,9 +215,11 @@ def invoiceGenerator(managerData, enterpriseData, enterpriseToData, billedTo):
     file_path = folder_path + "/" + filename + "_" + billedTo + ".docx"
     document.write(file_path)
     url = managerData["purchase_order"] + "/" + filename + "_" + billedTo + ".docx"
-    manager.update_one({"po": managerData["purchase_order"]}, {"$set": {
-        "invoice": url,
+    manager.update_one({"purchase_order": managerData["purchase_order"]}, {"$set": {
         "total_amt": int(total)
+    }})
+    manager.update_one({"purchase_order": managerData["purchase_order"]}, {"$push": {
+        "invoice": "http://104.45.155.38:5002/" + url
     }})
     return url
 
@@ -253,8 +255,8 @@ def summaryGenerator(SummaryData):
     file_path = folder_path + "/" + filename +".docx"
     document.write(file_path)
     url = SummaryData["purchase_order"] + "/" + filename + ".docx"
-    manager.update_one({"po": managerData["purchase_order"]}, {"$push": {
-        "box": url
+    manager.update_one({"po": SummaryData["purchase_order"]}, {"$push": {
+        "box": "http://104.45.155.38:5002/" + url
     }})
     return url
 

@@ -24,7 +24,7 @@ class APISettings(BaseSettings):
 
 
 class MongoSettings(BaseSettings):
-    uri: str = "mongodb://127.0.0.1:5001"
+    uri: str = "mongodb://104.45.155.38:5001"
     database: str = "robot_banao"
     users: str = "users"
     enterprises: str = "enterprises"
