@@ -20,12 +20,12 @@ class AsinInfoCreate(AsinInfoUpdate):
     """The AsinInfo information of a item of an purchase order"""
     id: str = AsinFields._id
     asin: str = AsinFields.asin
-    inventory: str = AsinFields.inventory
+    inventory: int = AsinFields.inventory
     master_sku: str = AsinFields.master_sku
     name: str = AsinFields.name
     hsn: str = AsinFields.hsn
     bundle_items: Optional[BundleItems] = AsinFields.bundle_items
-    our_cost: str = AsinFields.our_cost
+    our_cost: float = AsinFields.our_cost
     created: int = AsinFields.created
     updated: int = AsinFields.updated
 

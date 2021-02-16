@@ -17,7 +17,7 @@ class PurchaseOrderCreate(PurchaseOrderUpdate):
     """Body of PurchaseOrder POST requests"""
     purchase_order: str = PurchaseOrderFields.purchase_order
     tracking_id: str = PurchaseOrderFields.tracking_id
-    return_status: str = PurchaseOrderFields.return_status
+    return_status: bool = PurchaseOrderFields.return_status
     order_status: str = PurchaseOrderFields.order_status
     completed_status: bool = PurchaseOrderFields.completed_status
     items: Items = PurchaseOrderFields.items

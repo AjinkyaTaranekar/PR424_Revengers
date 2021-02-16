@@ -48,6 +48,7 @@ def adminFilesProcessing(path,export_channel,export_item,pricing):
     # Export Item Master
     exportItemFile = pd.read_csv(path+export_item, engine ='python')
 
+    print("Admin Files Fetched")
     count = 0
     adminData = []
     for i in range(len(exportChannelItemFile)): 
@@ -55,9 +56,9 @@ def adminFilesProcessing(path,export_channel,export_item,pricing):
         adminFile["_id"] = get_uuid()
         adminFile["asin"] = exportChannelItemFile.iloc[i]["Channel Product Id"]
         adminFile["master_sku"] = exportChannelItemFile.iloc[i]["Uniware Sku Code"]
-        adminFile["inventory"] = exportChannelItemFile.iloc[i]["Next Inventory Update"]
+        adminFile["inventory"] = int(exportChannelItemFile.iloc[i]["Next Inventory Update"] if not pd.isnull(exportChannelItemFile.iloc[i]["Next Inventory Update"]) else 0)
         adminFile["our_cost"] = pricingFile.loc[pricingFile['ASIN'] == adminFile["asin"]]['Cost'].values
-        adminFile["our_cost"] = adminFile["our_cost"][0] if len(adminFile["our_cost"]) else 0
+        adminFile["our_cost"] = float(adminFile["our_cost"][0].replace(",", '')) if len(adminFile["our_cost"]) else 0
         sku = adminFile["master_sku"]
         data = exportItemFile.loc[exportItemFile['Product Code'] == sku]
         adminFile["bundle_items"] = []
@@ -78,6 +79,8 @@ def adminFilesProcessing(path,export_channel,export_item,pricing):
             adminFile["bundle_items"] = bundle
         adminData.append(adminFile)
 
+    
+    print("Admin Data Processed")
     # Inserting data to admin database
     for data in adminData:
         asin = data["asin"]
@@ -92,6 +95,8 @@ def adminFilesProcessing(path,export_channel,export_item,pricing):
             }})
         else:
             admin.insert_one(data)     
+    
+    print("Admin Data Inserted")
 
 def managerFilesProcessing(path, purchase, quantity = None):
     """Manager Files are Processed here"""
@@ -114,7 +119,7 @@ def managerFilesProcessing(path, purchase, quantity = None):
         #print(database["_id"])
         database["purchase_order"] = k
         database["tracking_id"] = "NA"
-        database["return_status"] = "NA"
+        database["return_status"] = False
         database["order_status"] = "Incoming"
         database["completed_status"] = False
         database["ship_to_location"] = po[k][0][3]
@@ -137,8 +142,8 @@ def managerFilesProcessing(path, purchase, quantity = None):
                 #print(str(adminData['asin'].values[0]))
                 database["items"].append({
                     "asin_id": str(adminData['_id'].values[0]),
-                    "unit_cost": data[1],
-                    "quantity": data[2],
+                    "unit_cost": float(str(data[1]).replace(',','')),
+                    "quantity": int(str(data[2]).replace(",", '')),
                     "shipped" : False,
                     "stock": False if quantity and currentStock >= data[2] else True,
                     "details": {}

@@ -14,7 +14,7 @@ __all__ = ("PurchaseOrderItemUpdate", "Update")
 
 class Update(BaseModel):
     asin_id: str = ItemsFields.asin_id
-    unit_cost: str = ItemsFields.unit_cost
+    unit_cost: float = ItemsFields.unit_cost
     
 class PurchaseOrderItemUpdate(BaseModel):
     """Body of PurchaseOrder PATCH requests"""

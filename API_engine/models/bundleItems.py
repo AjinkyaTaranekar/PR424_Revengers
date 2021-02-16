@@ -15,6 +15,6 @@ class BundleItem(BaseModel):
     """The BundleItem information of a purchase order"""
     sku: str = BundleItemsFields.sku
     name: str = BundleItemsFields.name
-    quantity: str = BundleItemsFields.quantity
+    quantity: int = BundleItemsFields.quantity
     
 BundleItems = List[BundleItem]

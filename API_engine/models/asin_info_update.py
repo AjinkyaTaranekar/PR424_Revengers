@@ -16,10 +16,10 @@ __all__ = ("AsinInfoUpdate",)
 
 class AsinInfoUpdate(BaseModel):
     """Body of AsinInfo PATCH requests"""
-    inventory: Optional[str] = AsinFields.inventory
+    inventory: Optional[int] = AsinFields.inventory
     master_sku: Optional[str] = AsinFields.master_sku
     name: Optional[str] = AsinFields.name
     hsn: Optional[str] = AsinFields.hsn
     bundle_items: Optional[BundleItems] = AsinFields.bundle_items
-    our_cost: Optional[str] = AsinFields.our_cost
+    our_cost: Optional[float] = AsinFields.our_cost
     

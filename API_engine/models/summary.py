@@ -19,7 +19,7 @@ class SummaryItem(BaseModel):
     """The item information of a purchase summary"""
     asin: str = AsinFields.asin
     name: str = AsinFields.name
-    qty: str = ItemsFields.quantity
+    qty: int = ItemsFields.quantity
     sku: str = AsinFields.master_sku
     
 SummaryItems = List[SummaryItem]

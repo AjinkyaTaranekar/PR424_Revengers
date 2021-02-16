@@ -19,7 +19,7 @@ __all__ = ("Item", "Items")
 class Item(BaseModel):
     """The item information of a purchase order"""
     asin_id: str = ItemsFields.asin_id
-    unit_cost: str = ItemsFields.unit_cost
+    unit_cost: float = ItemsFields.unit_cost
     quantity: str = ItemsFields.quantity
     shipped: bool = ItemsFields.shipped
     stock: bool = ItemsFields.stock

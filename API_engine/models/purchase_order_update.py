@@ -17,7 +17,7 @@ __all__ = ("PurchaseOrderUpdate",)
 class PurchaseOrderUpdate(BaseModel):
     """Body of PurchaseOrder PATCH requests"""
     tracking_id: Optional[str] = PurchaseOrderFields.tracking_id
-    return_status: Optional[str] = PurchaseOrderFields.return_status
+    return_status: Optional[bool] = PurchaseOrderFields.return_status
     order_status: Optional[str] = PurchaseOrderFields.order_status
     completed_status: Optional[bool] = PurchaseOrderFields.completed_status
     box: Optional[List[str]] = PurchaseOrderFields.box

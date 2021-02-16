@@ -199,8 +199,7 @@ class AsinFields:
     )
     inventory = Field(
         description="Inventory of Item",
-        example="42",
-        **_string
+        example= 42
     )
     master_sku = Field(
         description="SKU provided to that item",
@@ -212,8 +211,7 @@ class AsinFields:
     )
     our_cost = Field(
         description="Cost of the product",
-        example="1200.0",
-        **_string
+        example = 1200.0
     )
     created = Field(
         alias="created",
@@ -245,13 +243,11 @@ class ItemsFields:
     )
     unit_cost = Field(
         description="Unit Cost of the item on Amazon",
-        example="1000.0",
-        **_string
+        example = 1000.0
     )
     quantity = Field(
         description="Quantity of the item requested",
-        example="45",
-        **_string
+        example = 45
     )
     details = Field(
         description="Details of the item requested"
@@ -270,8 +266,7 @@ class BundleItemsFields:
     )
     quantity = Field(
         description="Quantity of Item",
-        example="42",
-        **_string
+        example = 42
     )
 
 class PurchaseOrderFields:
@@ -299,8 +294,7 @@ class PurchaseOrderFields:
     )
     return_status = Field(
         description="Return Status of the purchase",
-        example="True",
-        **_string
+        example = True
     )
     order_status = Field(
         description="Order Status of the purchase",
