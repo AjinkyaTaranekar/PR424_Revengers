@@ -19,6 +19,8 @@ class PurchaseOrderCreate(PurchaseOrderUpdate):
     tracking_id: str = PurchaseOrderFields.tracking_id
     return_status: bool = PurchaseOrderFields.return_status
     order_status: str = PurchaseOrderFields.order_status
+    eway: str = PurchaseOrderFields.eway
+    awb: str = PurchaseOrderFields.awb
     completed_status: bool = PurchaseOrderFields.completed_status
     items: Items = PurchaseOrderFields.items
     ship_to_location: str = PurchaseOrderFields.ship_to_location

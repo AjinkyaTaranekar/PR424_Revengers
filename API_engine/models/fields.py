@@ -301,6 +301,16 @@ class PurchaseOrderFields:
         example="Incoming",
         **_string
     )
+    eway = Field(
+        description="Eway of the purchase",
+        example="EB245325",
+        **_string
+    )
+    awb = Field(
+        description="AWB of the purchase",
+        example="2324564534",
+        **_string
+    )
     completed_status = Field(
         description="Completed Status of the purchase",
         example=True

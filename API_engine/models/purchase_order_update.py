@@ -19,6 +19,8 @@ class PurchaseOrderUpdate(BaseModel):
     tracking_id: Optional[str] = PurchaseOrderFields.tracking_id
     return_status: Optional[bool] = PurchaseOrderFields.return_status
     order_status: Optional[str] = PurchaseOrderFields.order_status
+    eway: Optional[str] = PurchaseOrderFields.eway
+    awb: Optional[str] = PurchaseOrderFields.awb
     completed_status: Optional[bool] = PurchaseOrderFields.completed_status
     box: Optional[List[str]] = PurchaseOrderFields.box
     total_amt: Optional[int] = PurchaseOrderFields.total_amt

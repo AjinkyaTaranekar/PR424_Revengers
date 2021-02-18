@@ -119,6 +119,8 @@ def managerFilesProcessing(path, purchase, quantity = None):
         #print(database["_id"])
         database["purchase_order"] = k
         database["tracking_id"] = "NA"
+        database["eway"] = "NA"
+        database["awb"] = "NA"
         database["return_status"] = False
         database["order_status"] = "Incoming"
         database["completed_status"] = False
@@ -154,12 +156,15 @@ def managerFilesProcessing(path, purchase, quantity = None):
     for data in managerData:
         manager.insert_one(data)
         
-def invoiceGenerator(managerData, enterpriseData, enterpriseToData, billedTo):
+def invoiceGenerator(managerData, enterpriseData, enterpriseToData, billedTo, invoiceNo):
     template = "API_engine/template/invoice_template.docx"
     document = MailMerge(template)
     document.merge(
         PONumber = managerData["purchase_order"],
         billedto = billedTo,
+        InvoiceNumber = invoiceNo,
+        eway = managerData["eway"],
+        awb = managerData["awb"],
         BusinessName = enterpriseData["name"],
         Businessaddress = enterpriseData["address"]["street"] + ", " + enterpriseData["address"]["city"] + ", " + enterpriseData["address"]["state"] + ", " + enterpriseData["address"]["zip_code"],
         Businessemail = enterpriseData["email"],
@@ -318,7 +323,7 @@ def barcodeGenerator(managerData):
             "ASIN": str(item["details"]["asin"]),
             "ItemDescription": str(item["details"]["name"]),
             "Quantity": item["quantity"],
-            "SKU": item["details"]["master_sku"],
+            "MRP": item["unit_cost"],
         })
 
     df = pd.DataFrame(items)
@@ -329,6 +334,6 @@ def barcodeGenerator(managerData):
         os.makedirs(folder_path)
     file_path = folder_path + "/" + filename +".xlsx"
     
-    df.to_excel(file_path)
+    df.to_excel(file_path, index=False)
     url = managerData["purchase_order"].split("_")[0] + "/" + filename + ".docx"
     return url

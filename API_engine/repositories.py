@@ -313,9 +313,17 @@ class OrderRepository:
         if not enterpriseToData:
             raise EnterpriseNotFoundException(InvoiceData["billed_to_id"])
 
-        customer_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"customer")
-        seller_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"seller")
-        transporter_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"transporter")
+        invoiceNo = 0
+        with open('./API_engine/last_invoice_number.txt','r') as f:
+            invoiceNo=str(f.read())
+
+        customer_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"customer", invoiceNo)
+        seller_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"seller", invoiceNo)
+        transporter_path = invoiceGenerator(managerData,enterpriseData,enterpriseToData,"transporter", invoiceNo)
+        
+        with open('./API_engine/last_invoice_number.txt','w') as f:
+            f.write(str(int(invoiceNo)+1))
+
         return [customer_path, seller_path, transporter_path]
 
     @staticmethod
