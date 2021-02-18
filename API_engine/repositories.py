@@ -235,16 +235,21 @@ class PurchaseOrderRepository:
         return [PurchaseOrderRead(**document) for document in documents]
     
     @staticmethod
-    def filter(appt_date: str):
+    def filter(appt_date: str = None):
         """Retrieve all the available purchaseOrders with filter"""
         cursor = manager.find({"appt_date": appt_date})
+        if not appt_date :
+            cursor = manager.find()
+            
         documents = []
         #print(cursor)
         for document in cursor:
-            documents.append({
-                "appt_notes": document['appt_notes'],
-                "purchase_order": document['purchase_order']
-            })
+            if document['appt_date'] != "NA":
+                documents.append({
+                    "appt_date": document['appt_date'],
+                    "appt_notes": document['appt_notes'],
+                    "purchase_order": document['purchase_order']
+                })
         return JSONResponse(
                 content=documents,
                 status_code=200

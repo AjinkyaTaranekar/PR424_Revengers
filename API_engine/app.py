@@ -258,7 +258,7 @@ def _list_purchase_order():
     description="List all the available purchase orders on an appointment date",
     tags=["Purchase Order"]
 )
-def _list_purchase_order_at_appointment_date(appt_date: str):
+def _list_purchase_order_at_appointment_date(appt_date: Optional[str] = None):
     return PurchaseOrderRepository.filter(appt_date)
 
 @app.get(
