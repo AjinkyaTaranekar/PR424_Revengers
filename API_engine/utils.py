@@ -128,6 +128,9 @@ def managerFilesProcessing(path, purchase, quantity = None):
         database["box"] = []
         database["total_amt"] = 0
         database["invoice"] = []
+        database["shipped"] = []
+        database["payment"] = []
+        database["pod"] = "NA"
         database["appt_date"] = "NA"
         database["appt_notes"] = "NA"
         database["created"] = database["updated"] = get_time() 
@@ -154,7 +157,10 @@ def managerFilesProcessing(path, purchase, quantity = None):
     
     # Inserting Manager data to database
     for data in managerData:
-        manager.insert_one(data)
+        if manager.find_one({"purchase_order": data["purchase_order"]}):
+            pass
+        else:
+            manager.insert_one(data)
         
 def invoiceGenerator(managerData, enterpriseData, enterpriseToData, billedTo, invoiceNo):
     template = "API_engine/template/invoice_template.docx"

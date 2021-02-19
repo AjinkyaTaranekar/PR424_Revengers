@@ -26,5 +26,6 @@ class PurchaseOrderUpdate(BaseModel):
     total_amt: Optional[int] = PurchaseOrderFields.total_amt
     invoice : Optional[List[str]]  = PurchaseOrderFields.invoice
     appt_date : Optional[str] = PurchaseOrderFields.appt_date
+    pod : Optional[str] = PurchaseOrderFields.pod
     appt_notes: Optional[str] = PurchaseOrderFields.appt_notes
     

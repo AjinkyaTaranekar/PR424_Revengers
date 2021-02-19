@@ -193,6 +193,22 @@ class InventoryRepository:
         return InventoryRepository.get(result.inserted_id)
 
     @staticmethod
+    def clone(asin_id: str, asin: str) -> AsinInfoRead:
+        """Clone a asin and return its Read object"""
+        document = admin.find_one({"_id": asin_id})
+        document['asin'] = asin
+        document["created"] = document["updated"] = get_time()
+        document["_id"] = get_uuid()
+        
+        # The time and id could be inserted as a model's Field default factory,
+        # but would require having another model for Repository only to implement it
+
+        result = admin.insert_one(document)
+        assert result.acknowledged
+
+        return InventoryRepository.get(result.inserted_id)
+
+    @staticmethod
     def update(asin_id: str, update: AsinInfoUpdate):
         """Update a asin by giving only the fields to update"""
         document = update.dict()
@@ -263,7 +279,23 @@ class PurchaseOrderRepository:
         result = manager.update_one({"purchase_order": purchaseOrder}, {"$set": document})
         if not result.modified_count:
             raise PurchaseOrderNotFoundException(identifier=purchaseOrder)
+   
+    @staticmethod
+    def updatePodUrl(purchaseOrder: str, pod):
+        """Update a purchaseOrder by giving only the fields to update"""
+        managerData = manager.find_one({"purchase_order": purchaseOrder})
+        managerData["updated"] = get_time()
+        
+        path = "Uploads/" + purchaseOrder + '/'
+        with open(path + pod.filename, "wb") as buffer:
+            shutil.copyfileobj(pod.file, buffer)
+        
+        result = manager.update_one({"purchase_order": purchaseOrder}, {"$set": { "pod" : "http://104.45.155.38:5002/" +  path + pod.filename}})
+        if not result.modified_count:
+            raise PurchaseOrderNotFoundException(identifier=purchaseOrder)
     
+        return "http://104.45.155.38:5002/" +  path + pod.filename
+
     @staticmethod
     def updateItemStatus(update: PurchaseOrderStatusUpdate):
         """Update a purchaseOrder item status by giving asins to update"""
@@ -279,6 +311,54 @@ class PurchaseOrderRepository:
             #print(manager.find_one({"purchase_order": update["purchase_order"], "items.asin_id": asin_id}))
             result = manager.update_one({"purchase_order": update["purchase_order"], "items.asin_id": asin_id}, {"$set": {"items.$." + update["status"]: True}})
 
+        result = manager.update_one({"purchase_order": update["purchase_order"]}, {"$set": {"updated": updated}})
+    
+    @staticmethod
+    def updatePartialOrder(update: PurchaseOrderShipped):
+        """Update a purchaseOrder item status by giving asins to update"""
+        update = update.dict()
+        updated = get_time()
+        
+        managerData = manager.find_one({"purchase_order": update["purchase_order"]})
+        
+        if not managerData:
+            raise PurchaseOrderNotFoundException(update["purchase_order"])
+        
+        for item in update["update"]:
+            if managerData['shipped'] and any(item['asin_id'] in ship.values() for ship in managerData['shipped']):
+                manager.update_one({"purchase_order": managerData["purchase_order"]}, {"$pull": {
+                    "shipped": {
+                        "asin_id" : item['asin_id']
+                    }
+                }})
+            
+            manager.update_one({"purchase_order": managerData["purchase_order"]}, {"$push": {
+                "shipped": {
+                    "asin_id" : item['asin_id'],
+                    "quantity" : item['quantity'],
+                }
+            }})
+        result = manager.update_one({"purchase_order": update["purchase_order"]}, {"$set": {"updated": updated}})
+    
+    @staticmethod
+    def updatePaymentRecieved(update: PurchaseOrderPayment):
+        """Update a purchaseOrder item status by giving asins to update"""
+        update = update.dict()
+        updated = get_time()
+        
+        managerData = manager.find_one({"purchase_order": update["purchase_order"]})
+        
+        if not managerData:
+            raise PurchaseOrderNotFoundException(update["purchase_order"])
+        
+        
+        for item in update["update"]:
+            manager.update_one({"purchase_order": managerData["purchase_order"]}, {"$push": {
+                "payment": {
+                    "date" : item['date'],
+                    "amount" : item['amount'],
+                }
+            }})
         result = manager.update_one({"purchase_order": update["purchase_order"]}, {"$set": {"updated": updated}})
     
     @staticmethod

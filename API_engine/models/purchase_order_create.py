@@ -7,6 +7,8 @@ from typing import List
 
 # # Package # #
 from .purchase_order_update import PurchaseOrderUpdate
+from .purchase_order_shipped import Shipped
+from .purchase_order_payment import Payment
 from .fields import PurchaseOrderFields
 from .items import Items
 
@@ -27,5 +29,8 @@ class PurchaseOrderCreate(PurchaseOrderUpdate):
     box: List[str] = PurchaseOrderFields.box
     total_amt: int = PurchaseOrderFields.total_amt
     invoice : List[str]  = PurchaseOrderFields.invoice
+    shipped : List[Shipped]  = PurchaseOrderFields.shipped
+    payment : List[Payment]  = PurchaseOrderFields.payment
+    pod : str  = PurchaseOrderFields.pod
     appt_date : str  = PurchaseOrderFields.appt_date
     appt_notes: str  = PurchaseOrderFields.appt_notes

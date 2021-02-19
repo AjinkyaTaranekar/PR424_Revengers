@@ -11,7 +11,7 @@ from pydantic import Field
 # # Package # #
 from ..utils import get_time, get_uuid
 
-__all__ = ("UserFields", "AddressFields", "EnterpriseFields", "PurchaseOrderFields", "ItemsFields", "SummaryFields", "PurchaseOrderStatusFields", "PurchaseOrderItemFields")
+__all__ = ("UserFields", "AddressFields", "EnterpriseFields", "PurchaseOrderFields", "ItemsFields", "SummaryFields", "PurchaseOrderStatusFields", "PurchaseOrderItemFields", "PurchaseOrderPaymentFields")
 
 _string = dict(min_length=1)
 """Common attributes for all String fields"""
@@ -328,6 +328,17 @@ class PurchaseOrderFields:
     invoice  = Field(
         description="Invoice URLs of the purchase"
     )
+    shipped  = Field(
+        description="Shipped status of the purchase"
+    )
+    payment  = Field(
+        description="Payment of the purchase"
+    )
+    pod  = Field(
+        description="Image of Recipt of the purchase",
+        example="https://robot_banao/pod/134323",
+        **_string
+    )
     appt_date  = Field(
         description="Appointment Date of the purchase",
         example="2021-02-14",
@@ -372,6 +383,16 @@ class PurchaseOrderItemFields:
     )
     update = Field(
         description="Update List in this purchase in form of asin and unit cost"
+    )
+
+class PurchaseOrderPaymentFields:
+    amount = Field(
+        description="Amount return of the purchase",
+        example=4656,
+    )
+    date = Field(
+        description="Return date of the purchase",
+        example="2020-02-21"
     )
 
 class SummaryFields:

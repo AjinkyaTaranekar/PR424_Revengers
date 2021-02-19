@@ -223,6 +223,17 @@ def _get_asin(asin_id: str):
 def _create_asin(create: AsinInfoCreate):
     return InventoryRepository.create(create)
 
+@app.post(
+    "/asins/clone",
+    description="Clone an asin",
+    response_model=AsinInfoRead,
+    status_code=statuscode.HTTP_201_CREATED,
+    responses=get_exception_responses(AsinInfoAlreadyExistsException),
+    tags=["Inventory"]
+)
+def _create_asin(asin_id: str, asin: str):
+    return InventoryRepository.clone(asin_id, asin)
+
 @app.patch(
     "/asins/{asin_id}",
     description="Update a single asin by its unique ID, providing the fields to update",
@@ -300,6 +311,40 @@ def  _update_purchase_order_item_status(update: PurchaseOrderStatusUpdate):
 )
 def  _update_purchase_order_item_unit_cost(update: PurchaseOrderItemUpdate):
     PurchaseOrderRepository.updateItemUnitCost(update)
+
+@app.post(
+    "/purchase_orders/partial_order",
+    description="Update Shipped Status by its unique ID",
+    status_code=statuscode.HTTP_204_NO_CONTENT,
+    responses=get_exception_responses(PurchaseOrderNotFoundException),
+    tags=["Purchase Order"]
+)
+def  _update_purchase_order_shipped_status(update: PurchaseOrderShipped):
+    PurchaseOrderRepository.updatePartialOrder(update)
+
+@app.post(
+    "/purchase_orders/payment",
+    description="Update payment date and amount by its unique ID",
+    status_code=statuscode.HTTP_204_NO_CONTENT,
+    responses=get_exception_responses(PurchaseOrderNotFoundException),
+    tags=["Purchase Order"]
+)
+def  _update_purchase_order_payment_recieved(update: PurchaseOrderPayment):
+    PurchaseOrderRepository.updatePaymentRecieved(update)
+    
+@app.post(
+    "/purchase_orders/pod",
+    description="Update pod by its unique ID",
+    status_code=statuscode.HTTP_204_NO_CONTENT,
+    responses=get_exception_responses(PurchaseOrderNotFoundException),
+    tags=["Purchase Order"]
+)
+async def  _update_purchase_order_pod(purchase_order: str, pod: UploadFile = File(...)):
+    filePath = PurchaseOrderRepository.updatePodUrl(purchase_order, pod)
+    return {
+            "pod" : filePath,
+            "status": True
+        }
     
 @app.post(
     "/invoice",
